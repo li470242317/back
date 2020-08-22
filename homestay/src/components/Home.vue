@@ -38,17 +38,17 @@
                 <span @click="showPosition">职位管理</span>
               </el-menu-item>
             </el-submenu>
-            <el-menu-item index="2" :route="{name:'account'}">
-              <i class="el-icon-aim"></i>
-              <span>账号管理</span>
-            </el-menu-item>
-            <el-menu-item index="3" :route="{name:'client'}">
-              <i class="el-icon-attract"></i>
-              <span>客户管理</span>
-            </el-menu-item>
-            <el-menu-item index="4" :route="{name:'room_type'}">
-              <i class="el-icon-attract"></i>
-              <span>民宿类型管理</span>
+              <el-menu-item index="2" :route="{name:'account'}">
+                  <i class="el-icon-aim"></i>
+                  <span>账号管理</span>
+              </el-menu-item>
+              <el-menu-item index="3" :route="{name:'client'}">
+                  <i class="el-icon-attract"></i>
+                  <span>客户管理</span>
+              </el-menu-item>
+              <el-menu-item index="4" :route="{name:'room_type'}">
+                  <i class="el-icon-attract"></i>
+                  <span>民宿类型管理</span>
             </el-menu-item>
             <el-submenu index="5">
               <template slot="title">
