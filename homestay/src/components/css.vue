@@ -1,11 +1,11 @@
 <template>
-<div>cs</div>
+
 </template>
 
 <script>
-export default {
-  name: 'txt'
-}
+    export default {
+        name: "css"
+    }
 </script>
 
 <style scoped>
