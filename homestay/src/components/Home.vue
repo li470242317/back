@@ -3,7 +3,7 @@
     <el-container>
       <el-header>
         <el-dropdown style="float: right" @command="handlerCommand">
-          <span class="a">欢迎{{$route.params}}</span>
+          <span class="a">欢迎:{{$route.params.u.acc_name}}</span>
           <i class="el-icon-arrow-down"></i>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item command="Personal">个人信息</el-dropdown-item>
@@ -22,12 +22,12 @@
             <el-submenu index="1">
               <template slot="title">
                 <i class="el-icon-aim"></i>
-                <span>人事管理</span>
+                <span>基础管理</span>
               </template>
               <!-- 启用之后，item作为router-link来使用 route:匹配要访问的路由路径-->
               <el-menu-item index="1-1" :route="{name:''}">
                 <i class="el-icon-camera"></i>
-                <span>部门管理</span>
+                <span>员工管理</span>
               </el-menu-item>
               <el-menu-item index="1-2">
                 <i class="el-icon-dessert"></i>
@@ -51,7 +51,7 @@
                 <i class="el-icon-aim"></i>
                 <span>房间管理</span>
               </template>
-              <!-- 启用之后，item作为router-link来使用 route:匹配要访问的路由路径-->
+              &lt;!&ndash; 启用之后，item作为router-link来使用 route:匹配要访问的路由路径&ndash;&gt;
               <el-menu-item index="5-1" :route="{name:''}">
                 <i class="el-icon-aim"></i>
                 <span>房间管理</span>
@@ -82,7 +82,23 @@
 <script>
 export default {
   name: 'Home',
+  data: function () {
+    return {
+      list: []
+    }
+  },
+  created: function () {
+    this.selectName()
+  },
   methods: {
+    selectName: function () {
+      console.log(this.$route.params.u.acc_id)
+      this.$axios.post('http://localhost:8088/springboot/power/SelectName', this.$route.params.u)
+        .then(response => {
+          console.log(response.data)
+          this.list = response.data
+        })
+    },
     handlerCommand: function (command) {
       this.$router.push({name: command})
       // 路径写全
