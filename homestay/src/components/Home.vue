@@ -22,37 +22,36 @@
             <el-submenu index="1">
               <template slot="title">
                 <i class="el-icon-aim"></i>
-                <span>基础管理</span>
+                <span>人事管理</span>
               </template>
               <!-- 启用之后，item作为router-link来使用 route:匹配要访问的路由路径-->
-              <el-menu-item index="1-1" :route="{name:''}">
+              <el-menu-item index="1-1" :route="{name:'manager'}">
                 <i class="el-icon-camera"></i>
-                <span>员工管理</span>
+                <span>部门管理</span>
               </el-menu-item>
               <el-menu-item index="1-2">
                 <i class="el-icon-dessert"></i>
                 <span>员工管理</span>
               </el-menu-item>
             </el-submenu>
-            <el-menu-item index="2" :route="{name:''}">
+            <el-menu-item index="2" :route="{name:'account'}">
               <i class="el-icon-aim"></i>
               <span>账号管理</span>
             </el-menu-item>
-            <el-menu-item index="3" :route="{name:''}">
+            <el-menu-item index="3" :route="{name:'client'}">
               <i class="el-icon-attract"></i>
               <span>客户管理</span>
             </el-menu-item>
-            <el-menu-item index="4" :route="{name:''}">
+            <el-menu-item index="4" :route="{name:'room_type'}">
               <i class="el-icon-attract"></i>
-              <span>民宿管理</span>
+              <span>民宿类型管理</span>
             </el-menu-item>
             <el-submenu index="5">
               <template slot="title">
                 <i class="el-icon-aim"></i>
                 <span>房间管理</span>
               </template>
-              &lt;!&ndash; 启用之后，item作为router-link来使用 route:匹配要访问的路由路径&ndash;&gt;
-              <el-menu-item index="5-1" :route="{name:''}">
+              <el-menu-item index="5-1" :route="{name:'house'}">
                 <i class="el-icon-aim"></i>
                 <span>房间管理</span>
               </el-menu-item>
@@ -61,7 +60,7 @@
                 <span>房间评价</span>
               </el-menu-item>
             </el-submenu>
-            <el-menu-item index="6" :route="{name:''}">
+            <el-menu-item index="6" :route="{name:'water'}">
               <i class="el-icon-dessert"></i>
               <span>平台流水查看</span>
             </el-menu-item>
