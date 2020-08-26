@@ -46,6 +46,11 @@ export default new Router({
           component: () => import('../components/water')
         }
       ]
+    },
+    {
+      path: '/',
+      name: 'login',
+      component: () => import('../components/Login')
     }
   ]
 })
