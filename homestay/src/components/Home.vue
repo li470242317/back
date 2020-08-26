@@ -3,7 +3,7 @@
     <el-container>
       <el-header>
         <el-dropdown style="float: right" @command="handlerCommand">
-          <span class="a">欢迎{{$route.params.u.acc_name}}</span>
+          <span class="a">欢迎{{$route.params.u}}</span>
           <i class="el-icon-arrow-down"></i>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item command="Personal">个人信息</el-dropdown-item>
@@ -31,7 +31,7 @@
               </el-menu-item>
               <el-menu-item index="1-2" :route="{name:'employee'}">
                 <i class="el-icon-dessert"></i>
-                <span>员工管理</span>
+                <span @click="showEmployee">员工管理</span>
               </el-menu-item>
               <el-menu-item index="1-3" :route="{name:'position'}">
                 <i class="el-icon-dessert"></i>
@@ -40,15 +40,15 @@
             </el-submenu>
               <el-menu-item index="2" :route="{name:'account'}">
                   <i class="el-icon-aim"></i>
-                  <span>账号管理</span>
+                  <span @click="showAccount">账号管理</span>
               </el-menu-item>
               <el-menu-item index="3" :route="{name:'client'}">
                   <i class="el-icon-attract"></i>
-                  <span>客户管理</span>
+                  <span @click="showClient">客户管理</span>
               </el-menu-item>
               <el-menu-item index="4" :route="{name:'room_type'}">
                   <i class="el-icon-attract"></i>
-                  <span>民宿类型管理</span>
+                  <span @click="showRoom_type">民宿类型管理</span>
             </el-menu-item>
             <el-submenu index="5">
               <template slot="title">
@@ -123,6 +123,43 @@ export default {
           console.log(response.data)
           if (response.data != null) {
             this.$router.push({name: 'position', query: {position: response.data}})
+          }
+        })
+    },
+    showEmployee: function () {
+      this.$axios.post('http://localhost:8088/springboot/employee/employee_query')
+        .then(response => {
+          console.log(response.data)
+          if (response.data != null) {
+            this.$router.push({name: 'employee', query: {employee: response.data}})
+          }
+        })
+    },
+    showClient: function () {
+      this.$axios.post('http://localhost:8088/springboot/client/client_listAll')
+        .then(response => {
+          console.log(response.data)
+          console.log(1)
+          if (response.data != null) {
+            this.$router.push({name: 'client', query: {client: response.data}})
+          }
+        })
+    },
+    showAccount: function () {
+      this.$axios.post('http://localhost:8088/springboot/account/account_listAll')
+        .then(response => {
+          console.log(response.data)
+          if (response.data != null) {
+            this.$router.push({name: 'account', query: {account: response.data}})
+          }
+        })
+    },
+    showRoom_type: function () {
+      this.$axios.post('http://localhost:8088/springboot/room_type/room_listAll')
+        .then(response => {
+          console.log(response.data)
+          if (response.data != null) {
+            this.$router.push({name: 'room_type', query: {room_type: response.data}})
           }
         })
     }

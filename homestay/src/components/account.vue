@@ -18,12 +18,11 @@
       <el-table-column label="操作" fixed="right" width="100px">
         <template slot-scope="scope">
           <el-button type="text" @click="showDialog(scope.row)">修改</el-button>
-          <el-button type="text" @click="showDialog(scope.row)">重置密码</el-button>
+          <el-button type="text" @click="updateAccountPwd(scope.row)">重置密码</el-button>
         </template>
       </el-table-column>
     </el-table>
 
-    <!--添加民宿类型-->
     <!--添加模态框-->
     <el-dialog width="40%" title="添加账号" :visible="addVisible">
       <el-form label-width="100px" label-suffix="：" class="form"  ref="fm">
@@ -41,7 +40,7 @@
         <el-form-item label="员工名称" prop="emp_id">
           <el-select v-model="account.emp_id" placeholder="请选择">
             <el-option
-              v-for="item in this.empslist"
+              v-for="item in this.listemp"
               :key="item.emp_id"
               :label="item.emp_name"
               :value="item.emp_id"/>
@@ -60,17 +59,14 @@
         <el-form-item label="" prop="acc_id">
           <el-input v-model="account.acc_id" name="acc_id" type="hidden"></el-input>
         </el-form-item>
-        <el-form-item label="账号" prop="acc_name">
-          <el-input v-model="account.acc_name" name="acc_name"></el-input>
-        </el-form-item>
         <el-form-item label="密码" prop="acc_pwd">
           <el-input v-model="account.acc_pwd" name="acc_pwd"></el-input>
         </el-form-item>
-        <el-form-item label="状态" prop="acc_state">
-          <el-input v-model="account.acc_state" name="acc_state"></el-input>
-        </el-form-item>
-        <el-form-item label="员工编号" prop="emp_id">
-          <el-input v-model="account.emp_id" name="emp_id"></el-input>
+        <el-form-item label="员工状态" prop="acc_state">
+          <el-radio-group v-model="account.acc_state">
+            <el-radio :label="1">可用</el-radio>
+            <el-radio :label="0">不可用</el-radio>
+          </el-radio-group>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -79,7 +75,6 @@
       </div>
     </el-dialog>
   </div>
->>>>>>> Stashed changes
 </template>
 
 <script>
@@ -87,6 +82,7 @@ export default {
   name: 'account',
   data () {
     return {
+      state: 1,
       addVisible: false,
       updateVisible: false,
       account: {}
@@ -102,7 +98,7 @@ export default {
       this.$axios.post('http://localhost:8088/springboot/employee/employee_query')
         .then(response => {
           console.log(response.data)
-          this.empslist = response.data
+          this.listemp = response.data
         })
     },
     showDialog2: function () {
@@ -112,7 +108,7 @@ export default {
       this.empfun()
     },
     addAccount: function () {
-      this.$axios.post('http://localhost:8088/springboot/account_add', this.$qs.stringify(this.account))
+      this.$axios.post('http://localhost:8088/springboot/account/account_add', this.$qs.stringify(this.account))
         .then(response => {
           if (response.data = 1) {
             alert('添加成功')
@@ -122,8 +118,19 @@ export default {
         })
     },
     updateAccount: function () {
-      this.$axios.post('http://localhost:8088/springboot/account_update', this.$qs.stringify(this.account))
+      this.$axios.post('http://localhost:8088/springboot/account/account_update', this.$qs.stringify(this.account))
         .then(response => {
+          if (response.data = 1) {
+            alert('修改成功')
+          } else {
+            alert('修改失败')
+          }
+        })
+    },
+    updateAccountPwd: function (row) {
+      this.$axios.post('http://localhost:8088/springboot/account/account_updatePwd', this.$qs.stringify(row))
+        .then(response => {
+          console.log(1)
           if (response.data = 1) {
             alert('修改成功')
           } else {
