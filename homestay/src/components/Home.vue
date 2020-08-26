@@ -3,7 +3,7 @@
     <el-container>
       <el-header>
         <el-dropdown style="float: right" @command="handlerCommand">
-          <span class="a">欢迎{{$route.params}}</span>
+          <span class="a">欢迎{{$route.params.u.acc_name}}</span>
           <i class="el-icon-arrow-down"></i>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item command="Personal">个人信息</el-dropdown-item>
@@ -86,7 +86,23 @@
 <script>
 export default {
   name: 'Home',
+  data: function () {
+    return {
+      list: []
+    }
+  },
+  create: function () {
+    this.selectName()
+  },
   methods: {
+    selectName: function () {
+      console.log(this.$route.params.u.acc_id)
+      this.$axios.post('http://localhost:8088/springboot/power/SelectName', this.$route.params.u)
+        .then(response => {
+          console.log(response.data)
+          this.list = response.data
+        })
+    },
     handlerCommand: function (command) {
       this.$router.push({name: command})
       // 路径写全
