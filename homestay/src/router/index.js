@@ -44,6 +44,16 @@ export default new Router({
           path: 'room_type',
           name: 'room_type',
           component: () => import('../components/room_type')
+        },
+        {
+          path: 'position',
+          name: 'position',
+          component: () => import('../components/position')
+        },
+        {
+          path: 'orders',
+          name: 'orders',
+          component: () => import('../components/orders')
         }
       ]
     }, {

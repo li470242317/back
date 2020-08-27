@@ -69,6 +69,10 @@
               <i class="el-icon-dessert"></i>
               <span>平台流水查看</span>
             </el-menu-item>
+            <el-menu-item index="7" :route="{name:'orders'}">
+              <i class="el-icon-dessert"></i>
+              <span @click="showOrders">订单管理</span>
+            </el-menu-item>
           </el-menu>
         </el-aside>
         <el-main>
@@ -160,6 +164,15 @@ export default {
           console.log(response.data)
           if (response.data != null) {
             this.$router.push({name: 'room_type', query: {room_type: response.data}})
+          }
+        })
+    },
+    showOrders: function () {
+      this.$axios.post('http://localhost:8088/springboot/orders/orders_query')
+        .then(response => {
+          console.log(response.data)
+          if (response.data != null) {
+            this.$router.push({name: 'orders', query: {orders: response.data}})
           }
         })
     }
