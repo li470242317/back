@@ -3,7 +3,7 @@
     <el-container>
       <el-header>
         <el-dropdown style="float: right" @command="handlerCommand">
-          <span class="a">欢迎{{$route.params.u}}</span>
+          <span class="a">欢迎:{{this.admins.data[0].acc_name}}</span>
           <i class="el-icon-arrow-down"></i>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item command="Personal">个人信息</el-dropdown-item>
@@ -13,67 +13,30 @@
       </el-header>
       <el-container>
         <el-aside>
+          <el-menu default-active="1" background-color="#545c64" text-color="#fff" active-text-color="#red">
+            <div v-for='c in acc_one.data'>
+            <el-submenu :index="c.pow_id.toString()" :route="{name:c.pow_url}">
+              <template slot="title">
+                <i :class="c.pow_url" style="color:white"></i>
+                <span >{{c.pow_name}}</span>
+              </template>
+              <div v-for="z in c.childrenList">
+                <el-menu-item :index="z.pow_id.toString()" :route="{name:z.pow_url}" >
+                  <template slot="title">
+                    <i :class="z.pow_url" style="color:white;font-size:small" ></i>
+                    <span style="font-size:small"  @click="Mg(z.pow_url)">
+                      {{z.pow_name}}
+                    </span>
+                  </template>
+                </el-menu-item>
+              </div>
+            </el-submenu>
+            </div>
+          </el-menu>
           <!--
               default-active=index：默认激活
               router:当行菜单是否启用路由，启用之后，item作为route-link来使用
           -->
-          <el-menu default-active="1" class="el-menu-vertical-demo" :router="true">
-            <!-- 可展开的导航 -->
-            <el-submenu index="1">
-              <template slot="title">
-                <i class="el-icon-aim"></i>
-                <span>人事管理</span>
-              </template>
-              <!-- 启用之后，item作为router-link来使用 route:匹配要访问的路由路径-->
-              <el-menu-item index="1-1" :route="{name:'manager'}">
-                <i class="el-icon-camera"></i>
-                <span @click="showManager">部门管理</span>
-              </el-menu-item>
-              <el-menu-item index="1-2" :route="{name:'employee'}">
-                <i class="el-icon-dessert"></i>
-                <span @click="showEmployee">员工管理</span>
-              </el-menu-item>
-              <el-menu-item index="1-3" :route="{name:'position'}">
-                <i class="el-icon-dessert"></i>
-                <span @click="showPosition">职位管理</span>
-              </el-menu-item>
-            </el-submenu>
-              <el-menu-item index="2" :route="{name:'account'}">
-                  <i class="el-icon-aim"></i>
-                  <span @click="showAccount">账号管理</span>
-              </el-menu-item>
-              <el-menu-item index="3" :route="{name:'client'}">
-                  <i class="el-icon-attract"></i>
-                  <span @click="showClient">客户管理</span>
-              </el-menu-item>
-              <el-menu-item index="4" :route="{name:'room_type'}">
-                  <i class="el-icon-attract"></i>
-                  <span @click="showRoom_type">民宿类型管理</span>
-            </el-menu-item>
-            <el-submenu index="5">
-              <template slot="title">
-                <i class="el-icon-aim"></i>
-                <span>房间管理</span>
-              </template>
-              <!-- 启用之后，item作为router-link来使用 route:匹配要访问的路由路径-->
-              <el-menu-item index="5-1" :route="{name:'house'}">
-                <i class="el-icon-aim"></i>
-                <span>房间管理</span>
-              </el-menu-item>
-              <el-menu-item index="5-2" :route="{name:'order_appraise'}">
-                <i class="el-icon-camera"></i>
-                <span @click="showOrder_appraise">房间评价</span>
-              </el-menu-item>
-            </el-submenu>
-            <el-menu-item index="6" :route="{name:'water'}">
-              <i class="el-icon-dessert"></i>
-              <span>平台流水查看</span>
-            </el-menu-item>
-            <el-menu-item index="7" :route="{name:'orders'}">
-              <i class="el-icon-dessert"></i>
-              <span @click="showOrders">订单管理</span>
-            </el-menu-item>
-          </el-menu>
         </el-aside>
         <el-main>
           <!-- 二级路由 -->
@@ -92,20 +55,27 @@ export default {
   name: 'Home',
   data: function () {
     return {
-      list: []
+      acc_one: '',
+      admins: ''
     }
   },
-  create: function () {
+  created: function () {
+    this.admins = JSON.parse(localStorage.getItem('admins'))
+    this.acc_one = JSON.parse(localStorage.getItem('acc_one'))
     this.selectName()
   },
   methods: {
     selectName: function () {
-      console.log(this.$route.params.u.acc_id)
-      this.$axios.post('http://localhost:8088/springboot/power/SelectName', this.$route.params.u)
-        .then(response => {
-          console.log(response.data)
-          this.list = response.data
-        })
+      let u = JSON.parse(this.$route.query.u)
+    },
+    Mg: function (clickname) {
+      this.acc_one = JSON.parse(localStorage.getItem('acc_one'))
+      this.admins = JSON.parse(localStorage.getItem('admins') || '[]')
+      // this.$axios.post('http://localhost:8088/springboot/power/query')
+      //   .then(response => {
+      //     this.$router.push({name: 'power', query: {acc_one: response.data}})
+      //   })
+      this.$router.push({name: clickname})
     },
     handlerCommand: function (command) {
       this.$router.push({name: command})
@@ -127,61 +97,6 @@ export default {
           console.log(response.data)
           if (response.data != null) {
             this.$router.push({name: 'position', query: {position: response.data}})
-          }
-        })
-    },
-    showEmployee: function () {
-      this.$axios.post('http://localhost:8088/springboot/employee/employee_query')
-        .then(response => {
-          console.log(response.data)
-          if (response.data != null) {
-            this.$router.push({name: 'employee', query: {employee: response.data}})
-          }
-        })
-    },
-    showClient: function () {
-      this.$axios.post('http://localhost:8088/springboot/client/client_listAll')
-        .then(response => {
-          console.log(response.data)
-          console.log(1)
-          if (response.data != null) {
-            this.$router.push({name: 'client', query: {client: response.data}})
-          }
-        })
-    },
-    showAccount: function () {
-      this.$axios.post('http://localhost:8088/springboot/account/account_listAll')
-        .then(response => {
-          console.log(response.data)
-          if (response.data != null) {
-            this.$router.push({name: 'account', query: {account: response.data}})
-          }
-        })
-    },
-    showRoom_type: function () {
-      this.$axios.post('http://localhost:8088/springboot/room_type/room_listAll')
-        .then(response => {
-          console.log(response.data)
-          if (response.data != null) {
-            this.$router.push({name: 'room_type', query: {room_type: response.data}})
-          }
-        })
-    },
-    showOrders: function () {
-      this.$axios.post('http://localhost:8088/springboot/orders/orders_query')
-        .then(response => {
-          console.log(response.data)
-          if (response.data != null) {
-            this.$router.push({name: 'orders', query: {orders: response.data}})
-          }
-        })
-    },
-    showOrder_appraise: function () {
-      this.$axios.post('http://localhost:8088/springboot/Order_appraise/Order_appraise_query')
-        .then(response => {
-          console.log(response.data)
-          if (response.data != null) {
-            this.$router.push({name: 'order_appraise', query: {order_appraise: response.data}})
           }
         })
     }

@@ -47,12 +47,17 @@ export default {
         if (valid) {
           this.$axios.post('http://localhost:8088/springboot/account/Login', this.account)
             .then(response => {
-              if (response.data != '') {
+              if (response != '') {
                 this.$message('登陆成功')
                 let u = response.data
+                this.$axios.post('http://localhost:8088/springboot/power/SelectName?pos_id=' + u[0].pos_id)
+                  .then(response2 => {
+                    this.$router.push({name: 'home', query: {u: JSON.stringify(u)}})
+                    localStorage.setItem('acc_one', JSON.stringify(response2))
+                    localStorage.setItem('admins', JSON.stringify(response))
+                  })
                 // 登陆成功
                 // 携带参数信息时,只能使用name
-                this.$router.push({name: 'home', params: {u: u}})
               } else {
                 this.$message('登陆失败,账号或密码错误')
               }
