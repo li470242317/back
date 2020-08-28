@@ -60,9 +60,9 @@
                 <i class="el-icon-aim"></i>
                 <span>房间管理</span>
               </el-menu-item>
-              <el-menu-item index="5-2">
+              <el-menu-item index="5-2" :route="{name:'order_appraise'}">
                 <i class="el-icon-camera"></i>
-                <span>房间评价</span>
+                <span @click="showOrder_appraise">房间评价</span>
               </el-menu-item>
             </el-submenu>
             <el-menu-item index="6" :route="{name:'water'}">
@@ -173,6 +173,15 @@ export default {
           console.log(response.data)
           if (response.data != null) {
             this.$router.push({name: 'orders', query: {orders: response.data}})
+          }
+        })
+    },
+    showOrder_appraise: function () {
+      this.$axios.post('http://localhost:8088/springboot/Order_appraise/Order_appraise_query')
+        .then(response => {
+          console.log(response.data)
+          if (response.data != null) {
+            this.$router.push({name: 'order_appraise', query: {order_appraise: response.data}})
           }
         })
     }

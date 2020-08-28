@@ -54,6 +54,11 @@ export default new Router({
           path: 'orders',
           name: 'orders',
           component: () => import('../components/orders')
+        },
+        {
+          path: 'order_appraise',
+          name: 'order_appraise',
+          component: () => import('../components/order_appraise')
         }
       ]
     }, {

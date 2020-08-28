@@ -107,11 +107,21 @@ export default {
       this.account = {}
       this.empfun()
     },
+    showAccount: function () {
+      this.$axios.post('http://localhost:8088/springboot/account/account_listAll')
+        .then(response => {
+          console.log(response.data)
+          if (response.data != null) {
+            this.$router.push({name: 'account', query: {account: response.data}})
+          }
+        })
+    },
     addAccount: function () {
       this.$axios.post('http://localhost:8088/springboot/account/account_add', this.$qs.stringify(this.account))
         .then(response => {
           if (response.data = 1) {
             alert('添加成功')
+            this.showAccount()
           } else {
             alert('添加失败')
           }
@@ -122,6 +132,7 @@ export default {
         .then(response => {
           if (response.data = 1) {
             alert('修改成功')
+            this.showAccount()
           } else {
             alert('修改失败')
           }
@@ -132,9 +143,10 @@ export default {
         .then(response => {
           console.log(1)
           if (response.data = 1) {
-            alert('修改成功')
+            alert('重置成功')
+            this.showAccount()
           } else {
-            alert('修改失败')
+            alert('重置失败')
           }
         })
     }

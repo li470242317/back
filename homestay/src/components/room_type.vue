@@ -45,11 +45,21 @@ export default {
       this.addVisible = true
       this.room_type = {}
     },
+    showRoom_type: function () {
+      this.$axios.post('http://localhost:8088/springboot/room_type/room_listAll')
+        .then(response => {
+          console.log(response.data)
+          if (response.data != null) {
+            this.$router.push({name: 'room_type', query: {room_type: response.data}})
+          }
+        })
+    },
     addRoom_type: function () {
       this.$axios.post('http://localhost:8088/springboot/room_type/room_add', this.$qs.stringify(this.room_type))
         .then(response => {
           if (response.data = 1) {
             alert('添加成功')
+            this.showRoom_type()
           } else {
             alert('添加失败')
           }

@@ -93,12 +93,22 @@ export default {
       this.position = {}
       this.funman()
     },
+    showPosition: function () {
+      this.$axios.post('http://localhost:8088/springboot/position/position_query')
+        .then(response => {
+          console.log(response.data)
+          if (response.data != null) {
+            this.$router.push({name: 'position', query: {position: response.data}})
+          }
+        })
+    },
     updatePosition: function () {
       console.log(this.position)
       this.$axios.post('http://localhost:8088/springboot/position/position_update', this.$qs.stringify(this.position))
         .then(response => {
           if (response.data = 1) {
             alert('修改成功')
+            this.showPosition()
           } else {
             alert('修改失败')
           }
@@ -109,6 +119,7 @@ export default {
         .then(response => {
           if (response.data = 1) {
             alert('添加成功')
+            this.showPosition()
           } else {
             alert('添加失败')
           }

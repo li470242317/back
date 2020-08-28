@@ -67,12 +67,22 @@ export default {
       this.addVisible = true
       this.manager = {}
     },
+    showManager: function () {
+      this.$axios.post('http://localhost:8088/springboot/manager/manager_query')
+        .then(response => {
+          console.log(response.data)
+          if (response.data != null) {
+            this.$router.push({name: 'manager', query: {manager: response.data}})
+          }
+        })
+    },
     updateManager: function () {
       console.log(this.manager)
       this.$axios.post('http://localhost:8088/springboot/manager/manager_update', this.$qs.stringify(this.manager))
         .then(response => {
           if (response.data = 1) {
             alert('修改成功')
+            this.showManager()
           } else {
             alert('修改失败')
           }
@@ -83,6 +93,7 @@ export default {
         .then(response => {
           if (response.data = 1) {
             alert('添加成功')
+            this.showManager()
           } else {
             alert('添加失败')
           }
