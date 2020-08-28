@@ -65,5 +65,13 @@ export default {
 </script>
 
 <style scoped>
-
+  .form {
+    border: 1px solid gray;
+    margin: 100px auto;
+    width: 30%;
+    border-radius: 25px;
+    box-shadow: 0 0 25px lightskyblue;
+    padding: 30px 50px;
+    text-align: center;
+  }
 </style>
