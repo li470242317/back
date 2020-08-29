@@ -4,7 +4,7 @@
     <h1>员工管理  <el-button type="success" @click="showDialogadd">添加</el-button></h1>-->
     <!-- data:绑定数据  height:声明之后会固定表头-->
     <el-button round @click="showDialog2()">添加</el-button>
-    <el-table :data="this.$route.query.account" width="100%" height="550px" :stripe="true" border>
+    <el-table :data="this.acc" width="100%" height="550px" :stripe="true" border>
       <!-- prop显示绑定的数据的属性 -->
       <el-table-column prop="acc_id" label="编号"></el-table-column>
       <el-table-column prop="acc_name" label="账号"></el-table-column>
@@ -25,9 +25,9 @@
 
     <!--添加模态框-->
     <el-dialog width="40%" title="添加账号" :visible="addVisible">
-      <el-form label-width="100px" label-suffix="：" class="form"  ref="fm">
+      <el-form label-width="100px" label-suffix="：" :model="account" class="form"  ref="fm" :rules="rules">
         <el-form-item label="账号" prop="acc_name">
-          <el-input v-model="account.acc_name" name="acc_name"></el-input>
+          <el-input v-model="account.acc_name" name="acc_name" ></el-input>
         </el-form-item>
         <el-form-item label="密码" prop="acc_pwd">
           <el-input v-model="account.acc_pwd" name="acc_pwd" type="123456"></el-input>
@@ -85,17 +85,45 @@ export default {
       state: 1,
       addVisible: false,
       updateVisible: false,
-      account: {}
+      account: {},
+      listemp: {},
+      acc: [],
+      rules: {
+        acc_name: [
+          // require:进行校验，默认校验费控 message:提示信息  trigger：触发校验的事件
+          {required: true, message: '员工账号不能为空', trigger: 'blur'},
+          // 自定义校验规则
+          {
+            trigger: ['blur'],
+            validator: function (rule, value, callback) {
+              if (value.indexOf('_') == 1) {
+                callback()
+              } else {
+                callback(new Error('员工账号不能包含_特殊符号'))
+              }
+            }
+          }
+        ]
+      }
     }
   },
+  created: function () {
+    this.listAll()
+  },
   methods: {
+    listAll: function () {
+      this.$axios.post('http://localhost:8088/springboot/account/account_listAll')
+        .then(res => {
+          this.acc = res.data
+        })
+    },
     showDialog: function (row) {
       // 显示模态窗口
       this.updateVisible = true
       this.account = row
     },
     empfun: function () {
-      this.$axios.post('http://localhost:8088/springboot/employee/employee_query')
+      this.$axios.post('http://localhost:8088/springboot/employee/employee_query2')
         .then(response => {
           console.log(response.data)
           this.listemp = response.data

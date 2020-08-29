@@ -3,7 +3,7 @@
   <div>
     <!-- data:绑定数据  height:声明之后会固定表头-->
     <el-button round @click="showDialog2()">添加</el-button>
-    <el-table :data="this.$route.query.house" width="100%" height="550px" :stripe="true" border>
+    <el-table :data="this.hou" width="100%" height="550px" :stripe="true" border>
       <!-- prop显示绑定的数据的属性 -->
       <el-table-column prop="hou_id" label="房间编号"></el-table-column>
       <el-table-column prop="hou_name" label="房间名称"></el-table-column>
@@ -35,7 +35,19 @@ export default {
   name: 'house',
   data () {
     return {
-      house: {}
+      house: {},
+      hou: []
+    }
+  },
+  created: function () {
+    this.listAll()
+  },
+  methods: {
+    listAll: function () {
+      this.$axios.post('http://localhost:8088/springboot/house/house_listAll')
+        .then(res => {
+          this.hou = res.data
+        })
     }
   }
 }

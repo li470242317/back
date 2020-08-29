@@ -3,7 +3,7 @@
   <div><!--
     <h1>员工管理  <el-button type="success" @click="showDialogadd">添加</el-button></h1>-->
     <!-- data:绑定数据  height:声明之后会固定表头-->
-    <el-table :data="this.$route.query.client" width="100%" height="550px" :stripe="true" border>
+    <el-table :data="this.cli" width="100%" height="550px" :stripe="true" border>
       <!-- prop显示绑定的数据的属性 -->
       <el-table-column prop="cli_id" label="客户编号"></el-table-column>
       <el-table-column prop="cli_name" label="客户名称"></el-table-column>
@@ -34,7 +34,19 @@ export default {
   name: 'client',
   data () {
     return {
-      client: {}
+      client: {},
+      cli: []
+    }
+  },
+  created: function () {
+    this.listAll()
+  },
+  methods: {
+    listAll: function () {
+      this.$axios.post('http://localhost:8088/springboot/client/client_listAll')
+        .then(res => {
+          this.cli = res.data
+        })
     }
   }
 }

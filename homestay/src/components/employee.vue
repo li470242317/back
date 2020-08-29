@@ -3,7 +3,7 @@
   <div>
     <!-- data:绑定数据  height:声明之后会固定表头-->
     <el-button round @click="showDialog2()">添加</el-button>
-    <el-table :data="this.$route.query.Ph.rows" width="100%" height="550px" :stripe="true" border>
+    <el-table :data="this.emp" width="100%" height="550px" :stripe="true" border>
       <!-- prop显示绑定的数据的属性 -->
       <el-table-column prop="emp_id" label="员工编号"></el-table-column>
       <el-table-column prop="emp_name" label="员工名称"></el-table-column>
@@ -82,6 +82,7 @@ export default {
       addVisible: false,
       updateVisible: false,
       employee: {},
+      emp: [],
       pageNum: 1,
       pageSize: 3,
       pickerOptions: {
@@ -112,7 +113,16 @@ export default {
       hiredate: ''
     }
   },
+  created: function () {
+    this.listAll()
+  },
   methods: {
+    listAll: function () {
+      this.$axios.post('http://localhost:8088/springboot/employee/emp_query2')
+        .then(res => {
+          this.emp = res.data
+        })
+    },
     handleCurrentChange (val) {
       console.log(`当前页 ${val} `)
       this.$axios.post('http://localhost:8088/springboot/employee/employee_query?pageNum=' + val + '')
