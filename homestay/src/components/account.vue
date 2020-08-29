@@ -4,7 +4,7 @@
     <h1>员工管理  <el-button type="success" @click="showDialogadd">添加</el-button></h1>-->
     <!-- data:绑定数据  height:声明之后会固定表头-->
     <el-button round @click="showDialog2()">添加</el-button>
-    <el-table :data="this.acc" width="100%" height="550px" :stripe="true" border>
+    <el-table :data="acc.slice((currentPage-1)*PageSize,currentPage*PageSize)" width="100%" height="550px" :stripe="true" border>
       <!-- prop显示绑定的数据的属性 -->
       <el-table-column prop="acc_id" label="编号"></el-table-column>
       <el-table-column prop="acc_name" label="账号"></el-table-column>
@@ -22,7 +22,16 @@
         </template>
       </el-table-column>
     </el-table>
-
+    <!--分页-->
+    <el-pagination
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+      :current-page="currentPage"
+      :page-sizes="pageSizes"
+      :page-size="PageSize"
+      layout="total, sizes, prev, pager, next, jumper"
+      :total="totalCount">
+    </el-pagination>
     <!--添加模态框-->
     <el-dialog width="40%" title="添加账号" :visible="addVisible">
       <el-form label-width="100px" label-suffix="：" :model="account" class="form"  ref="fm" :rules="rules">
@@ -104,7 +113,15 @@ export default {
             }
           }
         ]
-      }
+      },
+      // 默认显示第几页
+      currentPage: 1,
+      // 总条数，根据接口获取数据长度(注意：这里不能为空)
+      totalCount: 0,
+      // 个数选择器（可修改）
+      pageSizes: [5, 10, 15, 30],
+      // 默认每页显示的条数（可修改）
+      PageSize: 5
     }
   },
   created: function () {
@@ -115,7 +132,19 @@ export default {
       this.$axios.post('http://localhost:8088/springboot/account/account_listAll')
         .then(res => {
           this.acc = res.data
+          this.totalCount = res.data.length
         })
+    },
+    handleSizeChange (val) {
+      // 改变每页显示的条数
+      this.PageSize = val
+      // 注意：在改变每页显示的条数时，要将页码显示到第一页
+      this.currentPage = 1
+    },
+    // 显示第几页
+    handleCurrentChange (val) {
+      // 改变默认的页数
+      this.currentPage = val
     },
     showDialog: function (row) {
       // 显示模态窗口
@@ -123,7 +152,7 @@ export default {
       this.account = row
     },
     empfun: function () {
-      this.$axios.post('http://localhost:8088/springboot/employee/employee_query2')
+      this.$axios.post('http://localhost:8088/springboot/employee/employee_query')
         .then(response => {
           console.log(response.data)
           this.listemp = response.data
@@ -135,32 +164,24 @@ export default {
       this.account = {}
       this.empfun()
     },
-    showAccount: function () {
-      this.$axios.post('http://localhost:8088/springboot/account/account_listAll')
-        .then(response => {
-          console.log(response.data)
-          if (response.data != null) {
-            this.$router.push({name: 'account', query: {account: response.data}})
-          }
-        })
-    },
     addAccount: function () {
       this.$axios.post('http://localhost:8088/springboot/account/account_add', this.$qs.stringify(this.account))
         .then(response => {
           if (response.data = 1) {
             alert('添加成功')
-            this.showAccount()
+            this.listAll()
           } else {
             alert('添加失败')
           }
         })
     },
     updateAccount: function () {
+      console.info(this.account)
       this.$axios.post('http://localhost:8088/springboot/account/account_update', this.$qs.stringify(this.account))
         .then(response => {
           if (response.data = 1) {
             alert('修改成功')
-            this.showAccount()
+            this.listAll()
           } else {
             alert('修改失败')
           }
@@ -172,7 +193,7 @@ export default {
           console.log(1)
           if (response.data = 1) {
             alert('重置成功')
-            this.showAccount()
+            this.listAll()
           } else {
             alert('重置失败')
           }

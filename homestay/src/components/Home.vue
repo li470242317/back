@@ -81,24 +81,6 @@ export default {
       this.$router.push({name: command})
       // 路径写全
       // this.$router.push({path:'/home/personal'});
-    },
-    showManager: function () {
-      this.$axios.post('http://localhost:8088/springboot/manager/manager_query')
-        .then(response => {
-          console.log(response.data)
-          if (response.data != null) {
-            this.$router.push({name: 'manager', query: {manager: response.data}})
-          }
-        })
-    },
-    showPosition: function () {
-      this.$axios.post('http://localhost:8088/springboot/position/position_query')
-        .then(response => {
-          console.log(response.data)
-          if (response.data != null) {
-            this.$router.push({name: 'position', query: {position: response.data}})
-          }
-        })
     }
   }
 }

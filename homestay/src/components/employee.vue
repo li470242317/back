@@ -3,7 +3,7 @@
   <div>
     <!-- data:绑定数据  height:声明之后会固定表头-->
     <el-button round @click="showDialog2()">添加</el-button>
-    <el-table :data="this.emp" width="100%" height="550px" :stripe="true" border>
+    <el-table :data="emp.slice((currentPage-1)*PageSize,currentPage*PageSize)" width="100%" height="550px" :stripe="true" border>
       <!-- prop显示绑定的数据的属性 -->
       <el-table-column prop="emp_id" label="员工编号"></el-table-column>
       <el-table-column prop="emp_name" label="员工名称"></el-table-column>
@@ -20,13 +20,15 @@
         </template>
       </el-table-column>
     </el-table>
-    <!--&lt;!&ndash;分页&ndash;&gt;-->
+    <!--分页-->
     <el-pagination
+      @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
-      :page-size="3"
-      :pager-count="11"
-      layout="prev, pager, next"
-      :total="this.$route.query.Ph.totalCount">
+      :current-page="currentPage"
+      :page-sizes="pageSizes"
+      :page-size="PageSize"
+      layout="total, sizes, prev, pager, next, jumper"
+      :total="totalCount">
     </el-pagination>
 
     <!--添加员工-->
@@ -83,27 +85,33 @@ export default {
       updateVisible: false,
       employee: {},
       emp: [],
-      pageNum: 1,
-      pageSize: 3,
+      // 默认显示第几页
+      currentPage: 1,
+      // 总条数，根据接口获取数据长度(注意：这里不能为空)
+      totalCount: 0,
+      // 个数选择器（可修改）
+      pageSizes: [5, 10, 15, 30],
+      // 默认每页显示的条数（可修改）
+      PageSize: 5,
       pickerOptions: {
-        disabledDate(time) {
+        disabledDate (time) {
           return time.getTime() > Date.now()
         },
         shortcuts: [{
           text: '今天',
-          onClick(picker) {
+          onClick (picker) {
             picker.$emit('pick', new Date())
           }
         }, {
           text: '昨天',
-          onClick(picker) {
+          onClick (picker) {
             const date = new Date()
             date.setTime(date.getTime() - 3600 * 1000 * 24)
             picker.$emit('pick', date)
           }
         }, {
           text: '一周前',
-          onClick(picker) {
+          onClick (picker) {
             const date = new Date()
             date.setTime(date.getTime() - 3600 * 1000 * 24 * 7)
             picker.$emit('pick', date)
@@ -118,25 +126,22 @@ export default {
   },
   methods: {
     listAll: function () {
-      this.$axios.post('http://localhost:8088/springboot/employee/emp_query2')
+      this.$axios.post('http://localhost:8088/springboot/employee/employee_query')
         .then(res => {
           this.emp = res.data
+          this.totalCount = res.data.length
         })
     },
+    handleSizeChange (val) {
+      // 改变每页显示的条数
+      this.PageSize = val
+      // 注意：在改变每页显示的条数时，要将页码显示到第一页
+      this.currentPage = 1
+    },
+    // 显示第几页
     handleCurrentChange (val) {
-      console.log(`当前页 ${val} `)
-      this.$axios.post('http://localhost:8088/springboot/employee/employee_query?pageNum=' + val + '')
-        .then(response => {
-          console.log(response.data)
-          if (response.data != null) {
-            this.$router.push({name: 'employee', query: {Ph: response.data}})
-          }
-        })
-    },
-    showDialog: function (row) {
-      // 显示模态窗口
-      this.updateVisible = true
-      this.employee = row
+      // 改变默认的页数
+      this.currentPage = val
     },
     showDialog2: function () {
       // 显示模态窗口
@@ -144,22 +149,13 @@ export default {
       this.employee = {}
     },
     addEmployee: function () {
+      console.info(this.employee)
       this.$axios.post('http://localhost:8088/springboot/employee/employee_add', this.$qs.stringify(this.employee))
         .then(response => {
           if (response.data = 1) {
             alert('添加成功')
           } else {
             alert('添加失败')
-          }
-        })
-    },
-    updateAccount: function () {
-      this.$axios.post('http://localhost:8088/springboot/account/account_update', this.$qs.stringify(this.account))
-        .then(response => {
-          if (response.data = 1) {
-            alert('修改成功')
-          } else {
-            alert('修改失败')
           }
         })
     }
