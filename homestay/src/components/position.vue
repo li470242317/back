@@ -194,10 +194,18 @@ export default {
       this.$axios.post('http://localhost:8088/springboot/position/position_update', this.$qs.stringify(this.position))
         .then(response => {
           if (response.data === 1) {
-            alert('修改成功')
+            this.$message({
+              showClose: true,
+              message: '恭喜你，修改成功',
+              type: 'success'
+            })
             this.showPosition()
           } else {
-            alert('修改失败')
+            this.$message({
+              showClose: true,
+              message: '修改失败！',
+              type: 'error'
+            })
           }
         })
     },
@@ -205,10 +213,18 @@ export default {
       this.$axios.post('http://localhost:8088/springboot/position/position_add', this.$qs.stringify(this.position))
         .then(response => {
           if (response.data === 1) {
-            alert('添加成功')
+            this.$message({
+              showClose: true,
+              message: '恭喜你，添加成功',
+              type: 'success'
+            })
             this.showPosition()
           } else {
-            alert('添加失败')
+            this.$message({
+              showClose: true,
+              message: '添加失败！',
+              type: 'error'
+            })
           }
         })
     }

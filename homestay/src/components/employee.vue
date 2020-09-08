@@ -16,7 +16,7 @@
       <el-table-column prop="dimission" label="离职时间"></el-table-column>
       <el-table-column label="操作" fixed="right" width="100px">
         <template slot-scope="scope">
-          <el-button type="text" @click="showDialog(scope.row)">修改</el-button>
+          <el-button type="primary" size="mini" icon="el-icon-edit" @click="showDialog(scope.row)">修改</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -153,9 +153,17 @@ export default {
       this.$axios.post('http://localhost:8088/springboot/employee/employee_add', this.$qs.stringify(this.employee))
         .then(response => {
           if (response.data = 1) {
-            alert('添加成功')
+            this.$message({
+              showClose: true,
+              message: '恭喜你，添加成功',
+              type: 'success'
+            })
           } else {
-            alert('添加失败')
+            this.$message({
+              showClose: true,
+              message: '添加失败！',
+              type: 'error'
+            })
           }
         })
     }

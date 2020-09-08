@@ -13,7 +13,7 @@
       </el-header>
       <el-container>
         <el-aside>
-          <el-menu default-active="1" background-color="#545c64" text-color="#fff" active-text-color="#red">
+          <el-menu default-active="1" background-color="lightgray" text-color="#black" active-text-color="#red">
             <div v-for='c in acc_one.data'>
             <el-submenu :index="c.pow_id.toString()" :route="{name:c.pow_url}">
               <template slot="title">
@@ -88,7 +88,7 @@ export default {
 
 <style scoped>
   .el-header, .el-footer {
-    background-color: lavender;
+    background-color: lightgray;
     line-height: 60px;
   }
 
@@ -97,11 +97,11 @@ export default {
   }
 
   .el-main {
-    background-color: lavenderblush;
+    background-color: white  ;
   }
 
   .a{
-    color: #409EFF;
+    color: black;
     cursor: pointer;
   }
 </style>

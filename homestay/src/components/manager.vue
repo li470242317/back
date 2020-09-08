@@ -9,7 +9,8 @@
     <el-table-column prop="man_name" label="部门名称"></el-table-column>
     <el-table-column label="操作" fixed="right" width="100px">
       <template slot-scope="scope">
-        <el-button type="text" @click="showDialog(scope.row)">修改</el-button>
+        <el-button type="primary" size="mini" icon="el-icon-edit" @click="showDialog(scope.row)">修改</el-button>
+        <!--<el-button type="text" @click="showDialog(scope.row)">修改</el-button>-->
       </template>
     </el-table-column>
   </el-table>
@@ -42,7 +43,7 @@
   <!--添加员工-->
   <!--添加模态框-->
   <el-dialog width="40%" title="添加部门" :visible="addVisible">
-    <el-form label-width="100px" label-suffix="：" class="form"  ref="fm">
+    <el-form label-width="100px" label-suffix="：" class="form" :rules="rules"  ref="fm">
       <el-form-item label="部门名称" prop="man_name">
         <el-input v-model="manager.man_name" name="man_name"></el-input>
       </el-form-item>
@@ -73,7 +74,12 @@ export default {
       // 个数选择器（可修改）
       pageSizes: [5, 10, 15, 30],
       // 默认每页显示的条数（可修改）
-      PageSize: 5
+      PageSize: 5,
+      rules: {
+        man_name: [
+          {required: true, message: '部门名称不能为空', trigger: 'blur'}
+        ]
+      }
     }
   },
   created: function () {
@@ -113,10 +119,18 @@ export default {
       this.$axios.post('http://localhost:8088/springboot/manager/manager_update', this.$qs.stringify(this.manager))
         .then(response => {
           if (response.data = 1) {
-            alert('修改成功')
+            this.$message({
+              showClose: true,
+              message: '恭喜你，修改成功',
+              type: 'success'
+            })
             this.listAll()
           } else {
-            alert('修改失败')
+            this.$message({
+              showClose: true,
+              message: '修改失败！',
+              type: 'error'
+            })
           }
         })
     },
@@ -124,10 +138,18 @@ export default {
       this.$axios.post('http://localhost:8088/springboot/manager/manager_add', this.$qs.stringify(this.manager))
         .then(response => {
           if (response.data = 1) {
-            alert('添加成功')
+            this.$message({
+              showClose: true,
+              message: '恭喜你，添加成功',
+              type: 'success'
+            })
             this.listAll()
           } else {
-            alert('添加失败')
+            this.$message({
+              showClose: true,
+              message: '添加失败！',
+              type: 'error'
+            })
           }
         })
     }

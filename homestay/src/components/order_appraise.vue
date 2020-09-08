@@ -21,12 +21,9 @@
     <el-table-column prop="or_cover" label="图片评价"></el-table-column>
     <el-table-column prop="oa_date" label="评价时间"></el-table-column>
     <el-table-column prop="or_details" label="评价详情"></el-table-column>
-    <!--<template slot-scope="scope">-->
-      <!--<el-button type="text" @click="deleteOrder_appraise(scope.row)">删除</el-button>-->
-    <!--</template>-->
     <el-table-column label="操作" fixed="right" width="100px">
       <template slot-scope="scope">
-        <el-button type="text" @click="deleteOrder_appraise(scope.row)">删除</el-button>
+       <el-button type="primary" size="mini" icon="el-icon-delete" @click="deleteOrder_appraise(scope.row)">删除</el-button>
       </template>
     </el-table-column>
   </el-table>
@@ -94,10 +91,18 @@ export default {
       this.$axios.post('http://localhost:8088/springboot/Order_appraise/Order_appraise_delete?oa_id=' + row.oa_id)
         .then(response => {
           if (response.data = 1) {
-            alert('删除成功')
+            this.$message({
+              showClose: true,
+              message: '恭喜你，删除成功',
+              type: 'success'
+            })
             this.listAll()
           } else {
-            alert('删除失败')
+            this.$message({
+              showClose: true,
+              message: '删除失败！',
+              type: 'error'
+            })
           }
         })
     }

@@ -15,10 +15,10 @@
         </template>
       </el-table-column>
       <el-table-column prop="emp_name" label="员工名称"></el-table-column>
-      <el-table-column label="操作" fixed="right" width="100px">
+      <el-table-column label="操作" fixed="right" width="300px">
         <template slot-scope="scope">
-          <el-button type="text" @click="showDialog(scope.row)">修改</el-button>
-          <el-button type="text" @click="updateAccountPwd(scope.row)">重置密码</el-button>
+          <el-button  type="primary" size="mini" icon="el-icon-edit"  @click="showDialog(scope.row)">修改</el-button>
+          <el-button type="primary" size="mini" icon="el-icon-edit"  @click="updateAccountPwd(scope.row)">重置密码</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -168,10 +168,18 @@ export default {
       this.$axios.post('http://localhost:8088/springboot/account/account_add', this.$qs.stringify(this.account))
         .then(response => {
           if (response.data = 1) {
-            alert('添加成功')
+            this.$message({
+              showClose: true,
+              message: '恭喜你，添加成功',
+              type: 'success'
+            })
             this.listAll()
           } else {
-            alert('添加失败')
+            this.$message({
+              showClose: true,
+              message: '添加失败！',
+              type: 'error'
+            })
           }
         })
     },
@@ -180,10 +188,18 @@ export default {
       this.$axios.post('http://localhost:8088/springboot/account/account_update', this.$qs.stringify(this.account))
         .then(response => {
           if (response.data = 1) {
-            alert('修改成功')
+            this.$message({
+              showClose: true,
+              message: '恭喜你，修改成功',
+              type: 'success'
+            })
             this.listAll()
           } else {
-            alert('修改失败')
+            this.$message({
+              showClose: true,
+              message: '修改失败！',
+              type: 'error'
+            })
           }
         })
     },
@@ -192,10 +208,18 @@ export default {
         .then(response => {
           console.log(1)
           if (response.data = 1) {
-            alert('重置成功')
+            this.$message({
+              showClose: true,
+              message: '恭喜你，重置成功',
+              type: 'success'
+            })
             this.listAll()
           } else {
-            alert('重置失败')
+            this.$message({
+              showClose: true,
+              message: '重置失败！',
+              type: 'error'
+            })
           }
         })
     }

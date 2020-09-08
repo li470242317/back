@@ -20,6 +20,8 @@
     <el-table-column prop="or_trueprice" label="实付款"></el-table-column>
     <el-table-column prop="or_state" label="订单状态">
       <template slot-scope="{row:{or_state}}">
+        <span v-if="+or_state===0">待确认</span>
+        <span v-if="+or_state===1">待支付</span>
         <span v-if="+or_state===2">已退款</span>
         <span v-if="+or_state===3">已付款</span>
         <span v-if="+or_state===4">已完成</span>
