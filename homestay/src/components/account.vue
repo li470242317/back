@@ -176,43 +176,60 @@ export default {
       this.empfun()
     },
     addAccount: function () {
-      this.$axios.post('http://localhost:8088/springboot/account/account_add', this.$qs.stringify(this.account))
-        .then(response => {
-          if (response.data = 1) {
-            this.$message({
-              showClose: true,
-              message: '恭喜你，添加成功',
-              type: 'success'
-            })
-            this.listAll()
-          } else {
-            this.$message({
-              showClose: true,
-              message: '添加失败！',
-              type: 'error'
-            })
-          }
+      if (this.acc_name == null || this.acc_name == '' || this.acc_pwd == null || this.acc_pwd == '') {
+        this.$message({
+          message: '字段不能为空',
+          type: 'error'
         })
+        return false
+      } else {
+        this.$axios.post('http://localhost:8088/springboot/account/account_add', this.$qs.stringify(this.account))
+          .then(response => {
+            if (response.data = 1) {
+              this.$message({
+                showClose: true,
+                message: '恭喜你，添加成功',
+                type: 'success'
+              })
+              this.listAll()
+            } else {
+              this.$message({
+                showClose: true,
+                message: '添加失败！',
+                type: 'error'
+              })
+            }
+          })
+      }
     },
     updateAccount: function () {
-      console.info(this.account)
-      this.$axios.post('http://localhost:8088/springboot/account/account_update', this.$qs.stringify(this.account))
-        .then(response => {
-          if (response.data = 1) {
-            this.$message({
-              showClose: true,
-              message: '恭喜你，修改成功',
-              type: 'success'
-            })
-            this.listAll()
-          } else {
-            this.$message({
-              showClose: true,
-              message: '修改失败！',
-              type: 'error'
-            })
-          }
+      if (this.acc_name == null || this.acc_name == '' || this.acc_pwd == null || this.acc_pwd == '') {
+        this.$message({
+          message: '字段不能为空',
+          type: 'error'
         })
+        this.listAll()
+        return false
+      } else {
+        console.info(this.account)
+        this.$axios.post('http://localhost:8088/springboot/account/account_update', this.$qs.stringify(this.account))
+          .then(response => {
+            if (response.data = 1) {
+              this.$message({
+                showClose: true,
+                message: '恭喜你，修改成功',
+                type: 'success'
+              })
+              this.listAll()
+            } else {
+              this.$message({
+                showClose: true,
+                message: '修改失败！',
+                type: 'error'
+              })
+            }
+          })
+      }
     },
     updateAccountPwd: function (row) {
       this.$axios.post('http://localhost:8088/springboot/account/account_updatePwd', this.$qs.stringify(row))

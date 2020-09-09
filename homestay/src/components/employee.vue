@@ -291,44 +291,61 @@ export default {
       this.employee = row
     },
     addEmployee: function () {
-      console.info(this.employee)
-      this.$axios.post('http://localhost:8088/springboot/employee/employee_add', this.$qs.stringify(this.employee))
-        .then(response => {
-          if (response.data = 1) {
-            this.$message({
-              showClose: true,
-              message: '恭喜你，添加成功',
-              type: 'success'
-            })
-            this.listAll()
-          } else {
-            this.$message({
-              showClose: true,
-              message: '添加失败！',
-              type: 'error'
-            })
-          }
+      if (this.emp_name == null || this.emp_name == '' || this.emp_age == null || this.emp_age == '' || this.emp_phone == null || this.emp_phone == '' || this.emp_address == null || this.emp_address == '' || this.emp_card == null || this.emp_card == '') {
+        this.$message({
+          message: '字段不能为空',
+          type: 'error'
         })
+        return false
+      } else {
+        console.info(this.employee)
+        this.$axios.post('http://localhost:8088/springboot/employee/employee_add', this.$qs.stringify(this.employee))
+          .then(response => {
+            if (response.data = 1) {
+              this.$message({
+                showClose: true,
+                message: '恭喜你，添加成功',
+                type: 'success'
+              })
+              this.listAll()
+            } else {
+              this.$message({
+                showClose: true,
+                message: '添加失败！',
+                type: 'error'
+              })
+            }
+          })
+      }
     },
     updateEmployee: function () {
-      console.info(this.employee)
-      this.$axios.post('http://localhost:8088/springboot/employee/employee_update', this.$qs.stringify(this.employee))
-        .then(response => {
-          if (response.data = 1) {
-            this.$message({
-              showClose: true,
-              message: '恭喜你，修改成功',
-              type: 'success'
-            })
-            this.listAll()
-          } else {
-            this.$message({
-              showClose: true,
-              message: '修改失败！',
-              type: 'error'
-            })
-          }
+      if (this.emp_name == null || this.emp_name == '' || this.emp_age == null || this.emp_age == '' || this.emp_phone == null || this.emp_phone == '' || this.emp_address == null || this.emp_address == '' || this.emp_card == null || this.emp_card == '') {
+        this.$message({
+          message: '字段不能为空',
+          type: 'error'
         })
+        this.listAll()
+        return false
+      } else {
+        console.info(this.employee)
+        this.$axios.post('http://localhost:8088/springboot/employee/employee_update', this.$qs.stringify(this.employee))
+          .then(response => {
+            if (response.data = 1) {
+              this.$message({
+                showClose: true,
+                message: '恭喜你，修改成功',
+                type: 'success'
+              })
+              this.listAll()
+            } else {
+              this.$message({
+                showClose: true,
+                message: '修改失败！',
+                type: 'error'
+              })
+            }
+          })
+      }
     }
   }
 }

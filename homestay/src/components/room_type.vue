@@ -114,23 +114,31 @@ export default {
       this.room_type = {}
     },
     addRoom_type: function () {
-      this.$axios.post('http://localhost:8088/springboot/room_type/room_add', this.$qs.stringify(this.room_type))
-        .then(response => {
-          if (response.data = 1) {
-            this.$message({
-              showClose: true,
-              message: '恭喜你,添加成功',
-              type: 'success'
-            })
-            this.listAll()
-          } else {
-            this.$message({
-              showClose: true,
-              message: '添加失败！',
-              type: 'error'
-            })
-          }
+      if (this.rt_name == null || this.rt_name == '' || this.rt_rec == null || this.rt_rec == '') {
+        this.$message({
+          message: '名称不能为空',
+          type: 'error'
         })
+        return false
+      } else {
+        this.$axios.post('http://localhost:8088/springboot/room_type/room_add', this.$qs.stringify(this.room_type))
+          .then(response => {
+            if (response.data = 1) {
+              this.$message({
+                showClose: true,
+                message: '恭喜你,添加成功',
+                type: 'success'
+              })
+              this.listAll()
+            } else {
+              this.$message({
+                showClose: true,
+                message: '添加失败！',
+                type: 'error'
+              })
+            }
+          })
+      }
     }
   }
 }

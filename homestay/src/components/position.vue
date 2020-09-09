@@ -206,43 +206,60 @@ export default {
         })
     },
     updatePosition: function () {
-      console.log(this.position)
-      this.$axios.post('http://localhost:8088/springboot/position/position_update', this.$qs.stringify(this.position))
-        .then(response => {
-          if (response.data === 1) {
-            this.$message({
-              showClose: true,
-              message: '恭喜你，修改成功',
-              type: 'success'
-            })
-            this.listAll()
-          } else {
-            this.$message({
-              showClose: true,
-              message: '修改失败！',
-              type: 'error'
-            })
-          }
+      if (this.pos_name == null || this.pos_name == '') {
+        this.$message({
+          message: '名称不能为空',
+          type: 'error'
         })
+        this.listAll()
+        return false
+      } else {
+        console.log(this.position)
+        this.$axios.post('http://localhost:8088/springboot/position/position_update', this.$qs.stringify(this.position))
+          .then(response => {
+            if (response.data === 1) {
+              this.$message({
+                showClose: true,
+                message: '恭喜你，修改成功',
+                type: 'success'
+              })
+              this.listAll()
+            } else {
+              this.$message({
+                showClose: true,
+                message: '修改失败！',
+                type: 'error'
+              })
+            }
+          })
+      }
     },
     addPosition: function () {
-      this.$axios.post('http://localhost:8088/springboot/position/position_add', this.$qs.stringify(this.position))
-        .then(response => {
-          if (response.data === 1) {
-            this.$message({
-              showClose: true,
-              message: '恭喜你，添加成功',
-              type: 'success'
-            })
-            this.listAll()
-          } else {
-            this.$message({
-              showClose: true,
-              message: '添加失败！',
-              type: 'error'
-            })
-          }
+      if (this.pos_name == null || this.pos_name == '') {
+        this.$message({
+          message: '名称不能为空',
+          type: 'error'
         })
+        return false
+      } else {
+        this.$axios.post('http://localhost:8088/springboot/position/position_add', this.$qs.stringify(this.position))
+          .then(response => {
+            if (response.data === 1) {
+              this.$message({
+                showClose: true,
+                message: '恭喜你，添加成功',
+                type: 'success'
+              })
+              this.listAll()
+            } else {
+              this.$message({
+                showClose: true,
+                message: '添加失败！',
+                type: 'error'
+              })
+            }
+          })
+      }
     }
   }
 

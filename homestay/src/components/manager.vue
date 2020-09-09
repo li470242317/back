@@ -63,23 +63,22 @@ export default {
       updateVisible: false,
       addVisible: false,
       manager: {},
+      man_name: '',
       rules: {
         man_name: [
           // require:进行校验,默认校验非空 message:提示信息 trigger:触发校验的时间
-          {required: true, message: '员工账号不能为空', trigger: 'blur'},
+          {required: true, message: '名称不能为空', trigger: 'blur'},
           {trigger: ['change', 'blur'],
             validator: function (rule, value, callback) {
               if (value.indexOf('_') == -1) {
                 callback()
               } else {
-                callback(new Error('员工账号不能包含_特殊字符'))
+                callback(new Error('不能包含_特殊字符'))
               }
             }
           }
         ]
       },
-      // pageNum: 1,
-      // pageSize: 3,
       man: [],
       // 默认显示第几页
       currentPage: 1,
@@ -124,43 +123,60 @@ export default {
       this.manager = {}
     },
     updateManager: function () {
-      console.log(this.manager)
-      this.$axios.post('http://localhost:8088/springboot/manager/manager_update', this.$qs.stringify(this.manager))
-        .then(response => {
-          if (response.data = 1) {
-            this.$message({
-              showClose: true,
-              message: '恭喜你,修改成功',
-              type: 'success'
-            })
-            this.listAll()
-          } else {
-            this.$message({
-              showClose: true,
-              message: '修改失败！',
-              type: 'error'
-            })
-          }
+      if (this.man_name == null || this.man_name == '') {
+        this.$message({
+          message: '名称不能为空',
+          type: 'error'
         })
+        this.listAll()
+        return false
+      } else {
+        console.log(this.manager)
+        this.$axios.post('http://localhost:8088/springboot/manager/manager_update', this.$qs.stringify(this.manager))
+          .then(response => {
+            if (response.data = 1) {
+              this.$message({
+                showClose: true,
+                message: '恭喜你,修改成功',
+                type: 'success'
+              })
+              this.listAll()
+            } else {
+              this.$message({
+                showClose: true,
+                message: '修改失败！',
+                type: 'error'
+              })
+            }
+          })
+      }
     },
     addManager: function () {
-      this.$axios.post('http://localhost:8088/springboot/manager/manager_add', this.$qs.stringify(this.manager))
-        .then(response => {
-          if (response.data = 1) {
-            this.$message({
-              showClose: true,
-              message: '恭喜你,添加成功',
-              type: 'success'
-            })
-            this.listAll()
-          } else {
-            this.$message({
-              showClose: true,
-              message: '添加失败！',
-              type: 'error'
-            })
-          }
+      if (this.man_name == null || this.man_name == '') {
+        this.$message({
+          message: '名称不能为空',
+          type: 'error'
         })
+        return false
+      } else {
+        this.$axios.post('http://localhost:8088/springboot/manager/manager_add', this.$qs.stringify(this.manager))
+          .then(response => {
+            if (response.data = 1) {
+              this.$message({
+                showClose: true,
+                message: '恭喜你,添加成功',
+                type: 'success'
+              })
+              this.listAll()
+            } else {
+              this.$message({
+                showClose: true,
+                message: '添加失败！',
+                type: 'error'
+              })
+            }
+          })
+      }
     }
   }
 
