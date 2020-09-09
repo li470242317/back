@@ -93,7 +93,10 @@ export default {
     return {
       addVisible: false,
       updateVisible: false,
-      account: {},
+      account: {
+        acc_name: '',
+        acc_pwd: ''
+      },
       listemp: {},
       acc: [],
       rules: {
@@ -176,7 +179,7 @@ export default {
       this.empfun()
     },
     addAccount: function () {
-      if (this.acc_name == null || this.acc_name == '' || this.acc_pwd == null || this.acc_pwd == '') {
+      if (this.account.acc_name == null || this.account.acc_name == '' || this.account.acc_pwd == null || this.account.acc_pwd == '') {
         this.$message({
           message: '字段不能为空',
           type: 'error'
@@ -203,7 +206,7 @@ export default {
       }
     },
     updateAccount: function () {
-      if (this.acc_name == null || this.acc_name == '' || this.acc_pwd == null || this.acc_pwd == '') {
+      if (this.account.acc_name == null || this.account.acc_name == '' || this.account.acc_pwd == null || this.account.acc_pwd == '') {
         this.$message({
           message: '字段不能为空',
           type: 'error'

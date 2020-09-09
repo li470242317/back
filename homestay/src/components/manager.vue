@@ -62,8 +62,9 @@ export default {
     return {
       updateVisible: false,
       addVisible: false,
-      manager: {},
-      man_name: '',
+      manager: {
+        man_name: ''
+      },
       rules: {
         man_name: [
           // require:进行校验,默认校验非空 message:提示信息 trigger:触发校验的时间
@@ -123,7 +124,7 @@ export default {
       this.manager = {}
     },
     updateManager: function () {
-      if (this.man_name == null || this.man_name == '') {
+      if (this.manager.man_name == null || this.manager.man_name == '') {
         this.$message({
           message: '名称不能为空',
           type: 'error'
@@ -152,7 +153,7 @@ export default {
       }
     },
     addManager: function () {
-      if (this.man_name == null || this.man_name == '') {
+      if (this.manager.man_name == null || this.manager.man_name == '') {
         this.$message({
           message: '名称不能为空',
           type: 'error'

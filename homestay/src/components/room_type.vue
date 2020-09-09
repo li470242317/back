@@ -46,7 +46,10 @@ export default {
   data () {
     return {
       addVisible: false,
-      room_type: {},
+      room_type: {
+        rt_name: '',
+        rt_rec: ''
+      },
       rules: {
         rt_name: [
           // require:进行校验,默认校验非空 message:提示信息 trigger:触发校验的时间
@@ -114,9 +117,9 @@ export default {
       this.room_type = {}
     },
     addRoom_type: function () {
-      if (this.rt_name == null || this.rt_name == '' || this.rt_rec == null || this.rt_rec == '') {
+      if (this.room.rt_name == null || this.room.rt_name == '' || this.room.rt_rec == null || this.room.rt_rec == '') {
         this.$message({
-          message: '名称不能为空',
+          message: '字段不能为空',
           type: 'error'
         })
         return false

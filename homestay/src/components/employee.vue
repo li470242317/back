@@ -152,7 +152,13 @@ export default {
     return {
       addVisible: false,
       updateVisible: false,
-      employee: {},
+      employee: {
+        emp_name: '',
+        emp_age: '',
+        emp_phone: '',
+        emp_address: '',
+        emp_card: ''
+      },
       rules: {
         emp_name: [
           // require:进行校验,默认校验非空 message:提示信息 trigger:触发校验的时间
@@ -291,7 +297,7 @@ export default {
       this.employee = row
     },
     addEmployee: function () {
-      if (this.emp_name == null || this.emp_name == '' || this.emp_age == null || this.emp_age == '' || this.emp_phone == null || this.emp_phone == '' || this.emp_address == null || this.emp_address == '' || this.emp_card == null || this.emp_card == '') {
+      if (this.employee.emp_name == null || this.employee.emp_name == '' || this.employee.emp_age == null || this.employee.emp_age == '' || this.employee.emp_phone == null || this.employee.emp_phone == '' || this.employee.emp_address == null || this.employee.emp_address == '' || this.employee.emp_card == null || this.employee.emp_card == '') {
         this.$message({
           message: '字段不能为空',
           type: 'error'
@@ -319,7 +325,7 @@ export default {
       }
     },
     updateEmployee: function () {
-      if (this.emp_name == null || this.emp_name == '' || this.emp_age == null || this.emp_age == '' || this.emp_phone == null || this.emp_phone == '' || this.emp_address == null || this.emp_address == '' || this.emp_card == null || this.emp_card == '') {
+      if (this.employee.emp_name == null || this.employee.emp_name == '' || this.employee.emp_age == null || this.employee.emp_age == '' || this.employee.emp_phone == null || this.employee.emp_phone == '' || this.employee.emp_address == null || this.employee.emp_address == '' || this.employee.emp_card == null || this.employee.emp_card == '') {
         this.$message({
           message: '字段不能为空',
           type: 'error'

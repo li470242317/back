@@ -92,7 +92,9 @@ export default {
       updateVisible: false,
       addVisible: false,
       authorityVisible: false,
-      position: {},
+      position: {
+        pos_name: ''
+      },
       rules: {
         pos_name: [
           // require:进行校验,默认校验非空 message:提示信息 trigger:触发校验的时间
@@ -206,7 +208,7 @@ export default {
         })
     },
     updatePosition: function () {
-      if (this.pos_name == null || this.pos_name == '') {
+      if (this.position.pos_name == null || this.position.pos_name == '') {
         this.$message({
           message: '名称不能为空',
           type: 'error'
@@ -235,7 +237,7 @@ export default {
       }
     },
     addPosition: function () {
-      if (this.pos_name == null || this.pos_name == '') {
+      if (this.position.pos_name == null || this.position.pos_name == '') {
         this.$message({
           message: '名称不能为空',
           type: 'error'
