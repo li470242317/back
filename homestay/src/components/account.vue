@@ -3,7 +3,7 @@
   <div><!--
     <h1>员工管理  <el-button type="success" @click="showDialogadd">添加</el-button></h1>-->
     <!-- data:绑定数据  height:声明之后会固定表头-->
-    <el-button round @click="showDialog2()">添加</el-button>
+    <el-button type="primary" round @click="showDialog2()">添加</el-button>
     <el-table :data="acc.slice((currentPage-1)*PageSize,currentPage*PageSize)" width="100%" height="550px" :stripe="true" border>
       <!-- prop显示绑定的数据的属性 -->
       <el-table-column prop="acc_id" label="编号"></el-table-column>
@@ -64,7 +64,7 @@
 
     <!--修改账号-->
     <el-dialog width="40%" title="修改账号" :visible="updateVisible">
-      <el-form label-width="100px" label-suffix="：" class="form"  ref="fm">
+      <el-form label-width="100px" label-suffix="：" :model="account" class="form"  ref="fm" :rules="rules">
         <el-form-item label="" prop="acc_id">
           <el-input v-model="account.acc_id" name="acc_id" type="hidden"></el-input>
         </el-form-item>
@@ -91,7 +91,6 @@ export default {
   name: 'account',
   data () {
     return {
-      state: 1,
       addVisible: false,
       updateVisible: false,
       account: {},
@@ -99,16 +98,28 @@ export default {
       acc: [],
       rules: {
         acc_name: [
-          // require:进行校验，默认校验费控 message:提示信息  trigger：触发校验的事件
+          // require:进行校验,默认校验非空 message:提示信息 trigger:触发校验的时间
           {required: true, message: '员工账号不能为空', trigger: 'blur'},
-          // 自定义校验规则
-          {
-            trigger: ['blur'],
+          {trigger: ['change', 'blur'],
             validator: function (rule, value, callback) {
-              if (value.indexOf('_') == 1) {
+              if (value.indexOf('_') == -1) {
                 callback()
               } else {
-                callback(new Error('员工账号不能包含_特殊符号'))
+                callback(new Error('员工账号不能包含_特殊字符'))
+              }
+            }
+          }
+        ],
+        acc_pwd: [
+          // require:进行校验,默认校验非空 message:提示信息 trigger:触发校验的时间
+          {required: true, message: '账号密码不能为空', trigger: 'blur'},
+          {min: 8, max: 16, message: '长度为必须为8-16位', trigger: ['change', 'blur']},
+          {trigger: ['change', 'blur'],
+            validator: function (rule, value, callback) {
+              if (value.indexOf('_') == -1) {
+                callback()
+              } else {
+                callback(new Error(''))
               }
             }
           }

@@ -2,12 +2,16 @@
     <!--<div>这是员工表</div>-->
   <div>
     <!-- data:绑定数据  height:声明之后会固定表头-->
-    <el-button round @click="showDialog2()">添加</el-button>
+    <el-button type="primary" round @click="showDialog2()">添加</el-button>
     <el-table :data="emp.slice((currentPage-1)*PageSize,currentPage*PageSize)" width="100%" height="550px" :stripe="true" border>
       <!-- prop显示绑定的数据的属性 -->
       <el-table-column prop="emp_id" label="员工编号"></el-table-column>
       <el-table-column prop="emp_name" label="员工名称"></el-table-column>
-      <el-table-column prop="emp_sex" label="性别"></el-table-column>
+      <el-table-column prop="emp_sex" label="性别">
+        <template slot-scope="scope">
+          {{scope.row.emp_sex==1?'女':'男'}}
+        </template>
+      </el-table-column>
       <el-table-column prop="emp_age" label="年龄"></el-table-column>
       <el-table-column prop="emp_phone" label="电话"></el-table-column>
       <el-table-column prop="emp_address" label="住址"></el-table-column>
@@ -33,12 +37,14 @@
 
     <!--添加员工-->
     <el-dialog width="40%" title="添加员工" :visible="addVisible">
-      <el-form label-width="100px" label-suffix="：" class="form"  ref="fm">
+      <el-form label-width="100px" label-suffix="：" class="form"  ref="fm" :model="employee" :rules="rules">
         <el-form-item label="员工名称" prop="emp_name">
           <el-input v-model="employee.emp_name" name="emp_name"></el-input>
         </el-form-item>
         <el-form-item label="性别" prop="emp_sex">
-          <el-input v-model="employee.emp_sex" name="emp_sex"></el-input>
+          <!--<el-input v-model="employee.emp_sex" name="emp_sex"></el-input>-->
+          <el-radio v-model="employee.emp_sex" label="1">女</el-radio>
+          <el-radio v-model="employee.emp_sex" label="0">男</el-radio>
         </el-form-item>
         <el-form-item label="年龄" prop="emp_age">
           <el-input v-model="employee.emp_age" name="emp_age"></el-input>
@@ -73,6 +79,69 @@
         <el-button type="success" @click="addVisible = false">取 消</el-button>
       </div>
     </el-dialog>
+
+    <!--修改员工-->
+    <el-dialog width="40%" title="修改员工" :visible="updateVisible">
+      <el-form label-width="100px" label-suffix="：" class="form"  ref="fm" :model="employee" :rules="rules">
+        <el-form-item label="员工名称" prop="emp_name">
+          <el-input v-model="employee.emp_name" name="emp_name"></el-input>
+        </el-form-item>
+        <!--<el-form-item label="性别" prop="emp_sex">
+          &lt;!&ndash;<el-input v-model="employee.emp_sex" name="emp_sex"></el-input>&ndash;&gt;
+          <el-radio v-model="employee.emp_sex" label="1">女</el-radio>
+          <el-radio v-model="employee.emp_sex" label="0">男</el-radio>
+        </el-form-item>-->
+        <el-form-item label="性别" prop="emp_sex">
+          <el-radio-group v-model="employee.emp_sex">
+            <el-radio :label="1">女</el-radio>
+            <el-radio :label="0">男</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label="年龄" prop="emp_age">
+          <el-input v-model="employee.emp_age" name="emp_age"></el-input>
+        </el-form-item>
+        <el-form-item label="电话" prop="emp_phone">
+          <el-input v-model="employee.emp_phone" name="emp_phone"></el-input>
+        </el-form-item>
+        <el-form-item label="住址" prop="emp_address">
+          <el-input v-model="employee.emp_address" name="emp_address"></el-input>
+        </el-form-item>
+        <el-form-item label="身份证号" prop="emp_card">
+          <el-input v-model="employee.emp_card" name="emp_card"></el-input>
+        </el-form-item>
+        <!--<template>
+          <div class="block">
+            <span class="demonstration">入职时间</span>
+            <el-date-picker
+              v-model="employee.hiredate"
+              align="right"
+              type="date"
+              placeholder="选择日期"
+              :picker-options="pickerOptions">
+            </el-date-picker>
+          </div>
+        </template>-->
+        <template>
+          <div class="block">
+            <span class="demonstration">离职时间</span>
+            <el-date-picker
+              v-model="employee.dimission"
+              align="right"
+              type="date"
+              placeholder="选择日期"
+              :picker-options="pickerOptions">
+            </el-date-picker>
+          </div>
+        </template>
+        <!--<el-form-item label="离职时间" prop="dimission">
+        <el-input v-model="employee.dimission" name="dimission"></el-input>
+      </el-form-item>-->
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="updateEmployee();updateVisible=false">修 改</el-button>
+        <el-button type="success" @click="updateVisible = false">取 消</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -84,6 +153,74 @@ export default {
       addVisible: false,
       updateVisible: false,
       employee: {},
+      rules: {
+        emp_name: [
+          // require:进行校验,默认校验非空 message:提示信息 trigger:触发校验的时间
+          {required: true, message: '员工名称不能为空', trigger: 'blur'},
+          {trigger: ['change', 'blur'],
+            validator: function (rule, value, callback) {
+              if (value.indexOf('_') == -1) {
+                callback()
+              } else {
+                callback(new Error('员工性别不能包含_特殊字符'))
+              }
+            }
+          }
+        ],
+        emp_age: [
+          // require:进行校验,默认校验非空 message:提示信息 trigger:触发校验的时间
+          {required: true, message: '员工年龄不能为空', trigger: 'blur'},
+          {min: 2, max: 6, message: '长度为必须为8-16位', trigger: ['change', 'blur']},
+          {trigger: ['change', 'blur'],
+            validator: function (rule, value, callback) {
+              if (value.indexOf('_') == -1) {
+                callback()
+              } else {
+                callback(new Error(''))
+              }
+            }
+          }
+        ],
+        emp_phone: [
+          // require:进行校验,默认校验非空 message:提示信息 trigger:触发校验的时间
+          {required: true, message: '员工手机号不能为空', trigger: 'blur'},
+          {trigger: ['change', 'blur'],
+            validator: function (rule, value, callback) {
+              if (value.indexOf('_') == -1) {
+                callback()
+              } else {
+                callback(new Error(''))
+              }
+            }
+          }
+        ],
+        emp_address: [
+          // require:进行校验,默认校验非空 message:提示信息 trigger:触发校验的时间
+          {required: true, message: '员工地址不能为空', trigger: 'blur'},
+          {trigger: ['change', 'blur'],
+            validator: function (rule, value, callback) {
+              if (value.indexOf('_') == -1) {
+                callback()
+              } else {
+                callback(new Error(''))
+              }
+            }
+          }
+        ],
+        emp_card: [
+          // require:进行校验,默认校验非空 message:提示信息 trigger:触发校验的时间
+          {required: true, message: '员工身份证号不能为空', trigger: 'blur'},
+          {trigger: ['change', 'blur'],
+            validator: function (rule, value, callback) {
+              if (value.indexOf('_') == -1) {
+                callback()
+              } else {
+                callback(new Error(''))
+              }
+            }
+          }
+        ]
+      },
       emp: [],
       // 默认显示第几页
       currentPage: 1,
@@ -148,6 +285,11 @@ export default {
       this.addVisible = true
       this.employee = {}
     },
+    showDialog: function (row) {
+      // 显示模态窗口
+      this.updateVisible = true
+      this.employee = row
+    },
     addEmployee: function () {
       console.info(this.employee)
       this.$axios.post('http://localhost:8088/springboot/employee/employee_add', this.$qs.stringify(this.employee))
@@ -158,10 +300,31 @@ export default {
               message: '恭喜你，添加成功',
               type: 'success'
             })
+            this.listAll()
           } else {
             this.$message({
               showClose: true,
               message: '添加失败！',
+              type: 'error'
+            })
+          }
+        })
+    },
+    updateEmployee: function () {
+      console.info(this.employee)
+      this.$axios.post('http://localhost:8088/springboot/employee/employee_update', this.$qs.stringify(this.employee))
+        .then(response => {
+          if (response.data = 1) {
+            this.$message({
+              showClose: true,
+              message: '恭喜你，修改成功',
+              type: 'success'
+            })
+            this.listAll()
+          } else {
+            this.$message({
+              showClose: true,
+              message: '修改失败！',
               type: 'error'
             })
           }

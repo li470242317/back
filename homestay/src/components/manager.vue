@@ -2,7 +2,7 @@
   <div>
   <!--<h1>部门管理  <el-button type="success" @click="showDialogadd">添加</el-button></h1>-->
   <!-- data:绑定数据  height:声明之后会固定表头-->
-  <el-button round @click="showDialog2()">添加</el-button>
+  <el-button type="primary" round @click="showDialog2()">添加</el-button>
   <el-table :data="man.slice((currentPage-1)*PageSize,currentPage*PageSize)" width="100%" height="550px" :stripe="true" border>
     <!-- prop显示绑定的数据的属性 -->
     <el-table-column prop="man_id" label="部门编号"></el-table-column>
@@ -10,7 +10,6 @@
     <el-table-column label="操作" fixed="right" width="100px">
       <template slot-scope="scope">
         <el-button type="primary" size="mini" icon="el-icon-edit" @click="showDialog(scope.row)">修改</el-button>
-        <!--<el-button type="text" @click="showDialog(scope.row)">修改</el-button>-->
       </template>
     </el-table-column>
   </el-table>
@@ -26,7 +25,7 @@
     </el-pagination>
   <!--修改模态框-->
   <el-dialog width="40%" title="修改部门" :visible="updateVisible">
-    <el-form label-width="100px" label-suffix="：" :model="manager" class="form"  ref="fm">
+    <el-form label-width="100px" label-suffix="：" :model="manager" class="form"  ref="fm" :rules="rules">
       <el-form-item label="" prop="man_id">
         <el-input v-model="manager.man_id" name="man_id" type="hidden"></el-input>
       </el-form-item>
@@ -43,7 +42,7 @@
   <!--添加员工-->
   <!--添加模态框-->
   <el-dialog width="40%" title="添加部门" :visible="addVisible">
-    <el-form label-width="100px" label-suffix="：" class="form" :rules="rules"  ref="fm">
+    <el-form label-width="100px" label-suffix="：" :model="manager" class="form"  ref="fm" :rules="rules">
       <el-form-item label="部门名称" prop="man_name">
         <el-input v-model="manager.man_name" name="man_name"></el-input>
       </el-form-item>
@@ -64,6 +63,21 @@ export default {
       updateVisible: false,
       addVisible: false,
       manager: {},
+      rules: {
+        man_name: [
+          // require:进行校验,默认校验非空 message:提示信息 trigger:触发校验的时间
+          {required: true, message: '员工账号不能为空', trigger: 'blur'},
+          {trigger: ['change', 'blur'],
+            validator: function (rule, value, callback) {
+              if (value.indexOf('_') == -1) {
+                callback()
+              } else {
+                callback(new Error('员工账号不能包含_特殊字符'))
+              }
+            }
+          }
+        ]
+      },
       // pageNum: 1,
       // pageSize: 3,
       man: [],
@@ -74,12 +88,7 @@ export default {
       // 个数选择器（可修改）
       pageSizes: [5, 10, 15, 30],
       // 默认每页显示的条数（可修改）
-      PageSize: 5,
-      rules: {
-        man_name: [
-          {required: true, message: '部门名称不能为空', trigger: 'blur'}
-        ]
-      }
+      PageSize: 5
     }
   },
   created: function () {
@@ -121,7 +130,7 @@ export default {
           if (response.data = 1) {
             this.$message({
               showClose: true,
-              message: '恭喜你，修改成功',
+              message: '恭喜你,修改成功',
               type: 'success'
             })
             this.listAll()
@@ -140,7 +149,7 @@ export default {
           if (response.data = 1) {
             this.$message({
               showClose: true,
-              message: '恭喜你，添加成功',
+              message: '恭喜你,添加成功',
               type: 'success'
             })
             this.listAll()

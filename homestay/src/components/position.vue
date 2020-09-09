@@ -2,7 +2,7 @@
   <div>
     <!--<h1>部门管理  <el-button type="success" @click="showDialogadd">添加</el-button></h1>-->
     <!-- data:绑定数据  height:声明之后会固定表头-->
-    <el-button round @click="showDialog2()">添加</el-button>
+    <el-button type="primary" round @click="showDialog2()">添加</el-button>
     <el-table :data="this.pos" width="100%" height="550px" :stripe="true" border>
       <!-- prop显示绑定的数据的属性 -->
       <el-table-column prop="pos_id" label="职位编号"></el-table-column>
@@ -10,7 +10,7 @@
       <el-table-column prop="man_name" label="部门名称"></el-table-column>
       <el-table-column label="操作" fixed="right" width="300px">
         <template slot-scope="scope">
-          <el-button type="primary" size="mini" icon="el-icon-edit" style="background-color:lightblue;border-color:black" @click="showDialog(scope.row)">修改</el-button>
+          <el-button type="primary" size="mini" icon="el-icon-edit"  @click="showDialog(scope.row)">修改</el-button>
           <el-button type="success" size="mini" icon="el-icon-share" @click="authorityVisible=true;setAuthority(scope.row)">
             权限
           </el-button>
@@ -20,7 +20,7 @@
 
     <!--修改模态框-->
     <el-dialog width="40%" title="修改职位" :visible="updateVisible">
-      <el-form label-width="100px" label-suffix="：" :model="position" class="form"  ref="fm">
+      <el-form label-width="100px" label-suffix="：" :model="position" class="form"  ref="fm" :rules="rules">
         <el-form-item label="" prop="pos_id">
           <el-input v-model="position.pos_id" name="pos_id" type="hidden"></el-input>
         </el-form-item>
@@ -46,7 +46,7 @@
     <!--添加员工-->
     <!--添加模态框-->
     <el-dialog width="40%" title="添加职位" :visible="addVisible">
-      <el-form label-width="100px" label-suffix="：" class="form"  ref="fm">
+      <el-form label-width="100px" label-suffix="：" :model="position" class="form"  ref="fm"  :rules="rules">
         <el-form-item label="职位名称" prop="pos_name">
           <el-input v-model="position.pos_name" name="pos_name"></el-input>
         </el-form-item>
@@ -93,6 +93,21 @@ export default {
       addVisible: false,
       authorityVisible: false,
       position: {},
+      rules: {
+        pos_name: [
+          // require:进行校验,默认校验非空 message:提示信息 trigger:触发校验的时间
+          {required: true, message: '职位账号不能为空', trigger: 'blur'},
+          {trigger: ['change', 'blur'],
+            validator: function (rule, value, callback) {
+              if (value.indexOf('_') == -1) {
+                callback()
+              } else {
+                callback(new Error('职位账号不能包含_特殊字符'))
+              }
+            }
+          }
+        ]
+      },
       manlist: {},
       pos: [],
       authorityList: [],
@@ -140,6 +155,7 @@ export default {
               message: '恭喜你,修改成功',
               type: 'success'
             })
+            this.listAll()
             this.authorityVisible = false
           } else {
             this.$message({
@@ -199,7 +215,7 @@ export default {
               message: '恭喜你，修改成功',
               type: 'success'
             })
-            this.showPosition()
+            this.listAll()
           } else {
             this.$message({
               showClose: true,
@@ -218,7 +234,7 @@ export default {
               message: '恭喜你，添加成功',
               type: 'success'
             })
-            this.showPosition()
+            this.listAll()
           } else {
             this.$message({
               showClose: true,

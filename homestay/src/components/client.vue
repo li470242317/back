@@ -7,7 +7,11 @@
       <!-- prop显示绑定的数据的属性 -->
       <el-table-column prop="cli_id" label="客户编号"></el-table-column>
       <el-table-column prop="cli_name" label="客户名称"></el-table-column>
-      <el-table-column prop="cli_sex" label="性别"></el-table-column>
+      <el-table-column prop="cli_sex" label="性别">
+        <template slot-scope="scope">
+          {{scope.row.cli_sex==1?'女':'男'}}
+        </template>
+      </el-table-column>
       <el-table-column prop="cli_phone" label="手机号"></el-table-column>
       <el-table-column prop="cli_date" label="出生日期"></el-table-column>
       <el-table-column prop="cli_place" label="所在城市"></el-table-column>
@@ -73,8 +77,8 @@ export default {
       // 注意：在改变每页显示的条数时，要将页码显示到第一页
       this.currentPage = 1
     },
-    // 显示第几页
     handleCurrentChange (val) {
+      // 显示第几页
       // 改变默认的页数
       this.currentPage = val
     }

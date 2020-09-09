@@ -3,7 +3,7 @@
   <div><!--
     <h1>员工管理  <el-button type="success" @click="showDialogadd">添加</el-button></h1>-->
     <!-- data:绑定数据  height:声明之后会固定表头-->
-    <el-button round @click="showDialog2()">添加</el-button>
+    <el-button type="primary" round @click="showDialog2()">添加</el-button>
     <el-table :data="room.slice((currentPage-1)*PageSize,currentPage*PageSize)" width="100%" height="550px" :stripe="true" border>
       <!-- prop显示绑定的数据的属性 -->
       <el-table-column prop="rt_id" label="类型编号"></el-table-column>
@@ -24,7 +24,7 @@
     <!--添加民宿类型-->
     <!--添加模态框-->
     <el-dialog width="40%" title="添加民宿类型" :visible="addVisible">
-      <el-form label-width="100px" label-suffix="：" class="form"  ref="fm">
+      <el-form label-width="100px" label-suffix="：" :model="room_type" class="form"  ref="fm" :rules="rules">
         <el-form-item label="类型名称" prop="rt_name">
           <el-input v-model="room_type.rt_name" name="rt_name"></el-input>
         </el-form-item>
@@ -45,10 +45,36 @@ export default {
   name: 'room_type',
   data () {
     return {
-      pageNum: 1,
-      pageSize: 3,
       addVisible: false,
       room_type: {},
+      rules: {
+        rt_name: [
+          // require:进行校验,默认校验非空 message:提示信息 trigger:触发校验的时间
+          {required: true, message: '类型不能为空不能为空', trigger: 'blur'},
+          {trigger: ['change', 'blur'],
+            validator: function (rule, value, callback) {
+              if (value.indexOf('_') == -1) {
+                callback()
+              } else {
+                callback(new Error('类型不能包含_特殊字符'))
+              }
+            }
+          }
+        ],
+        rt_rec: [
+          // require:进行校验,默认校验非空 message:提示信息 trigger:触发校验的时间
+          {required: true, message: '类型介绍不能为空不能为空', trigger: 'blur'},
+          {trigger: ['change', 'blur'],
+            validator: function (rule, value, callback) {
+              if (value.indexOf('_') == -1) {
+                callback()
+              } else {
+                callback(new Error('类型介绍不能包含_特殊字符'))
+              }
+            }
+          }
+        ]
+      },
       room: [],
       // 默认显示第几页
       currentPage: 1,
