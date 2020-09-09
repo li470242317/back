@@ -2,6 +2,15 @@
   <div>
   <!--<h1>部门管理  <el-button type="success" @click="showDialogadd">添加</el-button></h1>-->
   <!-- data:绑定数据  height:声明之后会固定表头-->
+    <el-select prop="or_state" v-model="or_state" placeholder="订单状态" >
+      <el-option value="">请选择</el-option>
+      <el-option value="0" label="待确认"></el-option>
+      <el-option value="1" label="待支付"></el-option>
+      <el-option value="2" label="已退款"></el-option>
+      <el-option value="3" label="已付款"></el-option>
+      <el-option value="4" label="已完成"></el-option>
+    </el-select>
+    <el-button @click="listAll">搜索</el-button>
   <el-table :data="or.slice((currentPage-1)*PageSize,currentPage*PageSize)" width="100%" height="550px" :stripe="true" border>
     <!-- prop显示绑定的数据的属性 -->
     <el-table-column prop="or_id" label="订单编号"></el-table-column>
@@ -57,7 +66,8 @@ export default {
       // 个数选择器（可修改）
       pageSizes: [5, 10, 15, 30],
       // 默认每页显示的条数（可修改）
-      PageSize: 5
+      PageSize: 5,
+      or_state: ''
     }
   },
   created: function () {
@@ -65,7 +75,7 @@ export default {
   },
   methods: {
     listAll: function () {
-      this.$axios.post('http://localhost:8088/springboot/orders/orders_query')
+      this.$axios.post('http://localhost:8088/springboot/orders/orders_query?or_state=' + this.or_state)
         .then(response => {
           this.or = response.data
           this.totalCount = response.data.length

@@ -135,7 +135,8 @@ export default {
       // 个数选择器（可修改）
       pageSizes: [5, 10, 15, 30],
       // 默认每页显示的条数（可修改）
-      PageSize: 5
+      PageSize: 5,
+      queryname: []
     }
   },
   created: function () {
@@ -179,34 +180,48 @@ export default {
       this.empfun()
     },
     addAccount: function () {
-      if (this.account.acc_name == null || this.account.acc_name == '' || this.account.acc_pwd == null || this.account.acc_pwd == '') {
-        this.$message({
-          message: '字段不能为空',
-          type: 'error'
-        })
-        return false
-      } else {
-        this.$axios.post('http://localhost:8088/springboot/account/account_add', this.$qs.stringify(this.account))
-          .then(response => {
-            if (response.data = 1) {
-              this.$message({
-                showClose: true,
-                message: '恭喜你，添加成功',
-                type: 'success'
-              })
-              this.listAll()
-            } else {
-              this.$message({
-                showClose: true,
-                message: '添加失败！',
-                type: 'error'
-              })
-            }
+      this.$axios.post('http://localhost:8088/springboot/account/queryname').then(response => {
+        this.queryname = response.data
+        for (var i = 0; i < this.queryname.length; i++) {
+          var name1 = this.queryname[i].acc_name
+          if (this.account.acc_name === name1) {
+            this.$message({
+              showClose: true,
+              message: '该账号已存在！',
+              type: 'error'
+            })
+            return false
+          }
+        }
+        if (this.account.acc_name == null || this.account.acc_name == '' || this.account.acc_pwd == null || this.account.acc_pwd == '') {
+          this.$message({
+            message: '字段不能为空',
+            type: 'error'
           })
-      }
+          return false
+        } else {
+          this.$axios.post('http://localhost:8088/springboot/account/account_add', this.$qs.stringify(this.account))
+            .then(response => {
+              if (response.data = 1) {
+                this.$message({
+                  showClose: true,
+                  message: '恭喜你，添加成功',
+                  type: 'success'
+                })
+                this.listAll()
+              } else {
+                this.$message({
+                  showClose: true,
+                  message: '添加失败！',
+                  type: 'error'
+                })
+              }
+            })
+        }
+      })
     },
     updateAccount: function () {
-      if (this.account.acc_name == null || this.account.acc_name == '' || this.account.acc_pwd == null || this.account.acc_pwd == '') {
+      if (this.account.acc_pwd == null || this.account.acc_pwd == '') {
         this.$message({
           message: '字段不能为空',
           type: 'error'

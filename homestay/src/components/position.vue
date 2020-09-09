@@ -27,15 +27,6 @@
         <el-form-item label="职位名称" prop="pos_name">
           <el-input v-model="position.pos_name" name="pos_name"></el-input>
         </el-form-item>
-        <el-form-item label="部门名称" prop="man_id">
-          <el-select v-model="position.man_id" placeholder="请选择" >
-            <el-option
-              v-for="item in this.manlist"
-              :key="item.man_id"
-              :label="item.man_name"
-              :value="item.man_id"/>
-          </el-select>
-        </el-form-item>
 
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -93,8 +84,10 @@ export default {
       addVisible: false,
       authorityVisible: false,
       position: {
-        pos_name: ''
+        pos_name: '',
+        man_id: ''
       },
+      queryname: [],
       rules: {
         pos_name: [
           // require:进行校验,默认校验非空 message:提示信息 trigger:触发校验的时间
@@ -208,63 +201,91 @@ export default {
         })
     },
     updatePosition: function () {
-      if (this.position.pos_name == null || this.position.pos_name == '') {
-        this.$message({
-          message: '名称不能为空',
-          type: 'error'
-        })
-        this.listAll()
-        return false
-      } else {
-        console.log(this.position)
-        this.$axios.post('http://localhost:8088/springboot/position/position_update', this.$qs.stringify(this.position))
-          .then(response => {
-            if (response.data === 1) {
-              this.$message({
-                showClose: true,
-                message: '恭喜你，修改成功',
-                type: 'success'
-              })
-              this.listAll()
-            } else {
-              this.$message({
-                showClose: true,
-                message: '修改失败！',
-                type: 'error'
-              })
-            }
+      this.$axios.post('http://localhost:8088/springboot/position/queryname?man_id=' + this.position.man_id).then(response => {
+        this.queryname = response.data
+        for (var i = 0; i < this.queryname.length; i++) {
+          var name1 = this.queryname[i].pos_name
+          if (this.position.pos_name === name1) {
+            this.$message({
+              showClose: true,
+              message: '该职位已存在！',
+              type: 'error'
+            })
+            this.listAll()
+            return false
+          }
+        }
+        if (this.position.pos_name == null || this.position.pos_name == '') {
+          this.$message({
+            message: '名称不能为空',
+            type: 'error'
           })
-      }
+          this.listAll()
+          return false
+        } else {
+          console.log(this.position)
+          this.$axios.post('http://localhost:8088/springboot/position/position_update', this.$qs.stringify(this.position))
+            .then(response => {
+              if (response.data === 1) {
+                this.$message({
+                  showClose: true,
+                  message: '恭喜你，修改成功',
+                  type: 'success'
+                })
+                this.listAll()
+              } else {
+                this.$message({
+                  showClose: true,
+                  message: '修改失败！',
+                  type: 'error'
+                })
+              }
+            })
+        }
+      })
     },
     addPosition: function () {
-      if (this.position.pos_name == null || this.position.pos_name == '') {
-        this.$message({
-          message: '名称不能为空',
-          type: 'error'
-        })
-        return false
-      } else {
-        this.$axios.post('http://localhost:8088/springboot/position/position_add', this.$qs.stringify(this.position))
-          .then(response => {
-            if (response.data === 1) {
-              this.$message({
-                showClose: true,
-                message: '恭喜你，添加成功',
-                type: 'success'
-              })
-              this.listAll()
-            } else {
-              this.$message({
-                showClose: true,
-                message: '添加失败！',
-                type: 'error'
-              })
-            }
+      this.$axios.post('http://localhost:8088/springboot/position/queryname?man_id=' + this.position.man_id).then(response => {
+        this.queryname = response.data
+        for (var i = 0; i < this.queryname.length; i++) {
+          var name1 = this.queryname[i].pos_name
+          if (this.position.pos_name === name1) {
+            this.$message({
+              showClose: true,
+              message: '该职位已存在！',
+              type: 'error'
+            })
+            return false
+          }
+        }
+        if (this.position.pos_name == null || this.position.pos_name == '') {
+          this.$message({
+            message: '名称不能为空',
+            type: 'error'
           })
-      }
+          return false
+        } else {
+          this.$axios.post('http://localhost:8088/springboot/position/position_add', this.$qs.stringify(this.position))
+            .then(response => {
+              if (response.data === 1) {
+                this.$message({
+                  showClose: true,
+                  message: '恭喜你，添加成功',
+                  type: 'success'
+                })
+                this.listAll()
+              } else {
+                this.$message({
+                  showClose: true,
+                  message: '添加失败！',
+                  type: 'error'
+                })
+              }
+            })
+        }
+      })
     }
   }
-
 }
 </script>
 
