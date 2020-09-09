@@ -2,6 +2,8 @@
     <!--<div>这是员工表</div>-->
   <div>
     <!-- data:绑定数据  height:声明之后会固定表头-->
+    <el-input prop="emp_name" v-model="emp_name" type="text" placeholder="请输入" style="width:200px;height:30px;"></el-input>
+    <el-button @click="listAll()">搜索</el-button>
     <el-button type="primary" round @click="showDialog2()">添加</el-button>
     <el-table :data="emp.slice((currentPage-1)*PageSize,currentPage*PageSize)" width="100%" height="550px" :stripe="true" border>
       <!-- prop显示绑定的数据的属性 -->
@@ -159,6 +161,9 @@ export default {
         emp_address: '',
         emp_card: ''
       },
+      employee: {},
+      emp_name: '',
+      emp_sex: 1,
       rules: {
         emp_name: [
           // require:进行校验,默认校验非空 message:提示信息 trigger:触发校验的时间
@@ -176,7 +181,7 @@ export default {
         emp_age: [
           // require:进行校验,默认校验非空 message:提示信息 trigger:触发校验的时间
           {required: true, message: '员工年龄不能为空', trigger: 'blur'},
-          {min: 2, max: 6, message: '长度为必须为8-16位', trigger: ['change', 'blur']},
+          {min: 2, max: 6, message: '年龄必须是数字', trigger: ['change', 'blur']},
           {trigger: ['change', 'blur'],
             validator: function (rule, value, callback) {
               if (value.indexOf('_') == -1) {
@@ -269,7 +274,7 @@ export default {
   },
   methods: {
     listAll: function () {
-      this.$axios.post('http://localhost:8088/springboot/employee/employee_query')
+      this.$axios.post('http://localhost:8088/springboot/employee/employee_query?emp_name=' + this.emp_name)
         .then(res => {
           this.emp = res.data
           this.totalCount = res.data.length

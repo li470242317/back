@@ -179,6 +179,33 @@ export default {
       this.account = {}
       this.empfun()
     },
+    /* addAccount: function () {
+      if (this.acc_name == null || this.acc_name == '' || this.acc_pwd == null || this.acc_pwd == '') {
+        this.$message({
+          message: '字段不能为空',
+          type: 'error'
+        })
+        return false
+      } else {
+        this.$axios.post('http://localhost:8088/springboot/account/account_add', this.$qs.stringify(this.account))
+          .then(response => {
+            if (response.data = 1) {
+              this.$message({
+                showClose: true,
+                message: '恭喜你，添加成功',
+                type: 'success'
+              })
+              this.listAll()
+            } else {
+              this.$message({
+                showClose: true,
+                message: '添加失败！',
+                type: 'error'
+              })
+            }
+          })
+      }
+    }, */
     addAccount: function () {
       this.$axios.post('http://localhost:8088/springboot/account/queryname').then(response => {
         this.queryname = response.data

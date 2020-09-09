@@ -3,6 +3,8 @@
   <div><!--
     <h1>员工管理  <el-button type="success" @click="showDialogadd">添加</el-button></h1>-->
     <!-- data:绑定数据  height:声明之后会固定表头-->
+    <el-input prop="cli_name" v-model="cli_name" type="text" placeholder="请输入" style="width:200px;height:30px;"></el-input>
+    <el-button @click="listAll()">搜索</el-button>
     <el-table :data="cli.slice((currentPage-1)*PageSize,currentPage*PageSize)" width="100%" height="550px" :stripe="true" border>
       <!-- prop显示绑定的数据的属性 -->
       <el-table-column prop="cli_id" label="客户编号"></el-table-column>
@@ -50,6 +52,7 @@ export default {
     return {
       client: {},
       cli: [],
+      cli_name: '',
       // 默认显示第几页
       currentPage: 1,
       // 总条数，根据接口获取数据长度(注意：这里不能为空)
@@ -65,7 +68,7 @@ export default {
   },
   methods: {
     listAll: function () {
-      this.$axios.post('http://localhost:8088/springboot/client/client_listAll')
+      this.$axios.post('http://localhost:8088/springboot/client/client_listAll?cli_name=' + this.cli_name)
         .then(res => {
           this.cli = res.data
           this.totalCount = res.data.length

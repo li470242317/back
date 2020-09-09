@@ -1,6 +1,7 @@
 <template>
- <div>
-   <el-form label-width="100px" label-suffix=":" :model="account" class="form" :rules="rules" ref="fm">
+ <div class="aaaa">
+   <el-form label-width="100px" label-suffix=":" :model="account" class="login-page" :rules="rules" ref="fm">
+     <h3 class="title">系统登录</h3>
      <el-form-item label="用户名" prop="acc_name">
        <!--必须去声明绑定的数据模型-->
        <el-input v-model="account.acc_name"></el-input>
@@ -70,7 +71,7 @@ export default {
 </script>
 
 <style scoped>
-  .form {
+  /*.form {
     border: 1px solid gray;
     margin: 100px auto;
     width: 30%;
@@ -78,5 +79,43 @@ export default {
     box-shadow: 0 0 25px lightskyblue;
     padding: 30px 50px;
     text-align: center;
+  }*/
+  .login-page{
+    /*-webkit-border-radius: 5px;
+    border-radius: 5px;
+    margin: 0px auto;
+    width: 350px;
+    padding: 20px 35px 35px 15px;
+    background: #fff;
+    border: 1px solid #eaeaea;
+    box-shadow: 0 0 25px #cac6c6;
+    align-items: center;
+    text-align: center;*/
+    border: 1px solid gray;
+    margin: 100px auto;
+    width: 30%;
+    border-radius: 25px;
+    box-shadow: 0 0 25px lightskyblue;
+    /*padding: 30px 50px;*/
+    text-align: center;
+    align-items: center;
+    padding: 20px 35px 35px 15px;
+  }
+  label.el-checkbox.rememberme{
+    margin: 0px 0px 15px;
+    text-align: left;
+  }
+
+  .aaaa{
+    position: absolute;
+    top: 0;
+    bottom:0;
+    left:0;
+    right: 0;
+    height: 100%;
+    width: 100%;
+    background-position: center;
+    background-size: cover;
+    background-image: url(../assets/img/322293.jpg);
   }
 </style>

@@ -2,6 +2,8 @@
     <!--<div>这是房间信息</div>-->
   <div>
     <!-- data:绑定数据  height:声明之后会固定表头-->
+    <el-input prop="hou_name" v-model="hou_name" type="text" placeholder="请输入" style="width:200px;height:30px;"></el-input>
+    <el-button @click="listAll()">搜索</el-button>
     <el-table :data="hou.slice((currentPage-1)*PageSize,currentPage*PageSize)" width="100%" height="550px" :stripe="true" border>
       <!-- prop显示绑定的数据的属性 -->
       <el-table-column prop="hou_id" label="房间编号"></el-table-column>
@@ -45,6 +47,7 @@ export default {
   data () {
     return {
       house: {},
+      hou_name: '',
       hou: [],
       // 默认显示第几页
       currentPage: 1,
@@ -61,8 +64,9 @@ export default {
   },
   methods: {
     listAll: function () {
-      this.$axios.post('http://localhost:8088/springboot/house/house_listAll')
+      this.$axios.post('http://localhost:8088/springboot/house/house_listAll?hou_name=' + this.hou_name)
         .then(res => {
+          console.info(this.hou[0])
           this.hou = res.data
           this.totalCount = res.data.length
         })

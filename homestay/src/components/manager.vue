@@ -68,12 +68,14 @@ export default {
       rules: {
         man_name: [
           // require:进行校验,默认校验非空 message:提示信息 trigger:触发校验的时间
+          {required: true, message: '部门名称不能为空', trigger: 'blur'},
           {required: true, message: '名称不能为空', trigger: 'blur'},
           {trigger: ['change', 'blur'],
             validator: function (rule, value, callback) {
               if (value.indexOf('_') == -1) {
                 callback()
               } else {
+                callback(new Error('部门名称不能包含_特殊字符'))
                 callback(new Error('不能包含_特殊字符'))
               }
             }
