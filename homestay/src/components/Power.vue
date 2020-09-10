@@ -66,7 +66,7 @@
 
       <el-form ref="configForm" :model="twolist" size="small" label-width="100px" style="width: 50%" class="form">
         <el-form-item label="父级模块" prop="">
-          <el-input :disabled="true" clearable v-model="onelist.name" name="" size="small" placeholder=""/>
+          <el-input :disabled="true" clearable v-model="onelist.name" name=""  size="small" placeholder=""/>
         </el-form-item>
 
         <el-form-item label="模块名称" prop="per_name">
@@ -263,5 +263,4 @@ export default {
     margin-right:3px;
     color: white;
   }
-
 </style>

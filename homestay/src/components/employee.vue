@@ -93,12 +93,18 @@
           <el-radio v-model="employee.emp_sex" label="1">女</el-radio>
           <el-radio v-model="employee.emp_sex" label="0">男</el-radio>
         </el-form-item>-->
-        <el-form-item label="性别" prop="emp_sex">
+        <!--<el-form-item label="性别" prop="emp_sex">
           <el-radio-group v-model="employee.emp_sex">
             <el-radio :label="1">女</el-radio>
             <el-radio :label="0">男</el-radio>
           </el-radio-group>
-        </el-form-item>
+        </el-form-item>-->
+        <template>
+          <div>
+            <label><input v-model="employee.emp_sex" type="radio" value="0" @change="getRadioVal">男</label>
+            <label><input v-model="employee.emp_sex" type="radio" value="1" @change="getRadioVal">女</label>
+          </div>
+        </template>
         <el-form-item label="年龄" prop="emp_age">
           <el-input v-model="employee.emp_age" name="emp_age"></el-input>
         </el-form-item>
@@ -163,7 +169,7 @@ export default {
       },
       employee: {},
       emp_name: '',
-      emp_sex: 1,
+      emp_sex: 0,
       rules: {
         emp_name: [
           // require:进行校验,默认校验非空 message:提示信息 trigger:触发校验的时间
@@ -181,13 +187,13 @@ export default {
         emp_age: [
           // require:进行校验,默认校验非空 message:提示信息 trigger:触发校验的时间
           {required: true, message: '员工年龄不能为空', trigger: 'blur'},
-          {min: 2, max: 6, message: '年龄必须是数字', trigger: ['change', 'blur']},
+          /* {min: 1, max: 3, message: '年龄必须是数字', trigger: ['change', 'blur']}, */
           {trigger: ['change', 'blur'],
             validator: function (rule, value, callback) {
-              if (value.indexOf('_') == -1) {
-                callback()
+              if (value && !(/^[1-9]\d*$/).test(value)) {
+                callback(new Error('只能填写数字'))
               } else {
-                callback(new Error(''))
+                callback()
               }
             }
           }
@@ -197,10 +203,10 @@ export default {
           {required: true, message: '员工手机号不能为空', trigger: 'blur'},
           {trigger: ['change', 'blur'],
             validator: function (rule, value, callback) {
-              if (value.indexOf('_') == -1) {
-                callback()
+              if (value && (!(/^((0\d{2,3}-\d{7,8})|(1[3584]\d{9}))$/).test(value))) {
+                callback(new Error('电话号码不符合规范'))
               } else {
-                callback(new Error(''))
+                callback()
               }
             }
           }
@@ -213,7 +219,7 @@ export default {
               if (value.indexOf('_') == -1) {
                 callback()
               } else {
-                callback(new Error(''))
+                callback(new Error('不能包含特殊符号'))
               }
             }
           }
@@ -223,10 +229,10 @@ export default {
           {required: true, message: '员工身份证号不能为空', trigger: 'blur'},
           {trigger: ['change', 'blur'],
             validator: function (rule, value, callback) {
-              if (value.indexOf('_') == -1) {
-                callback()
+              if (value && (!(/\d{17}[\d|x]|\d{15}/).test(value) || (value.length !== 15 && value.length !== 18))) {
+                callback(new Error('身份证号码不符合规范'))
               } else {
-                callback(new Error(''))
+                callback()
               }
             }
           }
@@ -273,6 +279,9 @@ export default {
     this.listAll()
   },
   methods: {
+    getRadioVal () {
+      console.log(this.radioVal)
+    },
     listAll: function () {
       this.$axios.post('http://localhost:8088/springboot/employee/employee_query?emp_name=' + this.emp_name)
         .then(res => {

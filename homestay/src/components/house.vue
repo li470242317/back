@@ -24,8 +24,12 @@
       <el-table-column prop="ru_price" label="日价"></el-table-column>
       <el-table-column prop="ru_checkdate" label="入住时间"></el-table-column>
       <el-table-column prop="ru_outdate" label="退房时间"></el-table-column>
-      <el-table-column prop="fac_prc" label="图片"></el-table-column>
-      <el-table-column prop="fac_photoprc" label="证件照"></el-table-column>
+      <el-table-column prop="fac_prc" label="图片">
+
+      </el-table-column>
+      <el-table-column prop="fac_photoprc" label="证件照">
+
+      </el-table-column>
       <el-table-column prop="fac_expiredate" label="到期时间"></el-table-column>
     </el-table>
     <!--分页-->

@@ -49,7 +49,7 @@ export default {
           this.$axios.post('http://localhost:8088/springboot/account/Login', this.account)
             .then(response => {
               if (response != '') {
-                this.$message('登陆成功')
+                this.$message('登陆失败,账号或密码错误')
                 let u = response.data
                 this.$axios.post('http://localhost:8088/springboot/power/SelectName?pos_id=' + u[0].pos_id)
                   .then(response2 => {
@@ -57,10 +57,10 @@ export default {
                     localStorage.setItem('acc_one', JSON.stringify(response2))
                     localStorage.setItem('admins', JSON.stringify(response))
                   })
+                this.$message('登陆成功')
                 // 登陆成功
                 // 携带参数信息时,只能使用name
               } else {
-                this.$message('登陆失败,账号或密码错误')
               }
             })
         }
@@ -116,6 +116,6 @@ export default {
     width: 100%;
     background-position: center;
     background-size: cover;
-    background-image: url(../assets/img/322293.jpg);
+    background-image: url(../../static/img/322293.jpg);
   }
 </style>

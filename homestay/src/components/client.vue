@@ -23,7 +23,11 @@
       <el-table-column prop="cli_qq" label="QQ"></el-table-column>
       <el-table-column prop="cli_wechat" label="微信"></el-table-column>
       <el-table-column prop="cli_referral" label="个人介绍"></el-table-column>
-      <el-table-column prop="cli_prc" label="头像"></el-table-column>
+      <el-table-column prop="cli_prc" label="头像">
+        <template slot-scope="scope">
+          <img :src="scope.row.cli_prc" style="width: 50px;height: 50px"/>
+        </template>
+      </el-table-column>
       <el-table-column prop="cli_rank" label="级别">
         <template slot-scope="scope">
           {{scope.row.cli_rank==1?'房东':'用户'}}
