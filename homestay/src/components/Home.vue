@@ -7,7 +7,9 @@
           <i class="el-icon-arrow-down"></i>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item command="Personal">个人信息</el-dropdown-item>
-            <el-dropdown-item command="Logout">退出</el-dropdown-item>
+            <a href="http://localhost:8080/#/">
+              <el-dropdown-item command="Logout">退出</el-dropdown-item>
+            </a>
           </el-dropdown-menu>
         </el-dropdown>
       </el-header>
