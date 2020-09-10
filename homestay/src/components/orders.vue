@@ -4,11 +4,11 @@
   <!-- data:绑定数据  height:声明之后会固定表头-->
     <el-select prop="or_state" v-model="or_state" placeholder="订单状态" >
       <el-option value="">请选择</el-option>
-      <el-option value="0" label="待确认"></el-option>
-      <el-option value="1" label="待支付"></el-option>
-      <el-option value="2" label="已退款"></el-option>
-      <el-option value="3" label="已付款"></el-option>
-      <el-option value="4" label="已完成"></el-option>
+      <el-option value="0" label="已确认"></el-option>
+      <el-option value="1" label="已取消"></el-option>
+      <el-option value="2" label="已付款"></el-option>
+      <el-option value="3" label="已完成"></el-option>
+      <el-option value="4" label="正在取消"></el-option>
     </el-select>
     <el-button @click="listAll">搜索</el-button>
   <el-table :data="or.slice((currentPage-1)*PageSize,currentPage*PageSize)" width="100%" height="550px" :stripe="true" border>
@@ -29,11 +29,11 @@
     <el-table-column prop="or_trueprice" label="实付款"></el-table-column>
     <el-table-column prop="or_state" label="订单状态">
       <template slot-scope="{row:{or_state}}">
-        <span v-if="+or_state===0">待确认</span>
-        <span v-if="+or_state===1">待支付</span>
-        <span v-if="+or_state===2">已退款</span>
-        <span v-if="+or_state===3">已付款</span>
-        <span v-if="+or_state===4">已完成</span>
+        <span v-if="+or_state===0">已确认</span>
+        <span v-if="+or_state===1">已取消</span>
+        <span v-if="+or_state===2">已付款</span>
+        <span v-if="+or_state===3">已完成</span>
+        <span v-if="+or_state===4">正在取消</span>
       </template>
     </el-table-column>
   </el-table>
